@@ -12,5 +12,10 @@ def index():
 def dashboard():
     return render_template('dashboard.html')
 
+@app.route('/Templates/systemtickets.html')
+
+def systemtickets():
+    return render_template('systemtickets.html')
+
 if __name__ =="__main__":
     app.run(debug=True)

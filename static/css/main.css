@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap');
+/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'); */
 
 /* _______________________________ROOT VARIABLES _______________________________*/
 :root{
@@ -19,11 +19,13 @@
     --border-radius-1: 0.4rem;
     --border-radius-2: 0.8rem;
     --border-radius-3: 1.2rem;
+    --border-radius-4: 1.3rem;
     
     --card-padding: 1.8rem;
     --padding-1: 1.2rem;
 
     --box-shadow: 0 2rem 3rem var(--color-light);
+    --box-shadow-2: 0 1rem 2rem var(--color-light);
 }
 *{
     margin: 0;
@@ -52,7 +54,7 @@ body{
     width: 96%;
     margin: 0 auto;
     gap: 1.8rem;
-    grid-template-columns: 14rem auto 23rem;
+    grid-template-columns: 14rem auto;
 }
 a{
     color: var(--color-dark);
@@ -182,4 +184,24 @@ aside .sidebar a:hover{
 }
 aside .sidebar a:hover span{
     margin-left: 1rem;
+}
+
+/* ================== SYSTEM TICKET===================== */
+main{
+    margin-top: 1rem;
+}
+main .tickets{
+    margin-top: 1rem;
+}
+main .tickets table{
+    background: var(--color-white);
+    width: 100%;
+    border-radius: var(--card-border-radius);
+    padding: var(--border-radius-4);
+    text-align: center;
+    box-shadow: var(--box-shadow-2);
+    transition: all 300ms ease;
+}
+main .tickets table:hover{
+    box-shadow: none;
 }
