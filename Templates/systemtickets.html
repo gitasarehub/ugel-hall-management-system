@@ -7,15 +7,51 @@
 <main>
     <h1>SYSTEM TICKETS</h1>
     <div class="tickets">
+        <div class="top">
+            <button id="menu-btn">
+                <span>
+                    <img src="{{url_for('static', filename='images/menu.svg')}}" width="20" height="20">
+                </span>
+            </button>
+            <div class="profile">
+                <div class="info">
+                    <p>Hello, <b>Hubert</b></p>
+                    <small class="text-muted">Admin</small>
+                </div>
+                <div class="profile-photo">
+                    <img src="{{url_for('static', filename='images/hubert.jpg')}}" alt="Profile Picture" >
+                </div>
+            </div>
+        </div>
        <table>
         <thead>
             <tr>
-                <th>Assignee</th>
+                <th>User</th>
                 <th>Action</th>
+                <th>Data</th>
                 <th>Timestamp</th>
-                <th>Modified</th>
             </tr>
         </thead>
+        <tbody>
+            <tr>
+                <td>hubert</td>
+                <td>Updated student details</td>
+                <td>Ama Narh</td>
+                <td>Today 9:00 am</td>
+            </tr>
+            <tr>
+                <td>ofosu</td>
+                <td>Updated student details</td>
+                <td>Baah Yirenkyi</td>
+                <td>Yesterday 3:29 pm</td>
+            </tr>
+            <tr>
+                <td>asare</td>
+                <td>Added a new student</td>
+                <td>Edmund Mensah Adanor</td>
+                <td>Monday 5:04 pm</td>
+            </tr>
+        </tbody>
        </table>
     </div>
 </main>

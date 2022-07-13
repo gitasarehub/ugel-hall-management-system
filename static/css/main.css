@@ -205,3 +205,11 @@ main .tickets table{
 main .tickets table:hover{
     box-shadow: none;
 }
+main .tickets tbody td{
+    height: 2.8rem;
+    border-bottom: 1px solid var(--color-light);
+    color: var(--color-dark-variant);
+}
+main .tickets tbody tr:last-child td{
+    border: none;
+}
