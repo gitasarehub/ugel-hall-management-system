@@ -1,0 +1,86 @@
+<html>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Hall Management System">
+  <meta name="author" content="GET IT DONE">
+  <meta name="keywords" content="UGEL Hall Management System">
+  <title>Hall Management System</title>
+  <!-- <link rel="stylesheet" href="{{url_for('static',filename='css/LandingPage/main.css')}}"> -->
+  <!-- Font special for pages-->
+  <!-- <link
+      href="https://fonts.googleapis.com/css?family=Poppins:100,100i,200,200i,300,300i,400,400i,500,500i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet"> -->
+
+  <script>
+      function allowNumbersOnly(e) {
+          var code = (e.which) ? e.which : e.keyCode;
+          if (code > 31 && (code < 48 || code > 57)) {
+              e.preventDefault();
+          }
+      }
+  </script>
+    <nav class="navbar">
+      <div class="nav-00"><a class="taessa" href="/">GET IT DONE</a></div>
+      <div class="nav-01">
+          <a href="/" class="navlink1">Home</a>
+          <a href="About" class="navlink1">About</a>
+          <a href="Contact" class="navlink1">Contact</a>
+      </div>
+      <div class="nav-02">
+          <a href="dashboard" class="gotodash">Go to Dashboard</a>
+          <a href="login" class="navlink2">Log in</a>
+          <div class="navlink2-signup"><a href="signup">Sign Up</a></div>
+      </div>
+    </nav>
+      <button type="button" class="hamburger"><i class="fa-solid fa-bars"></i></button>
+      <nav class="mobile-navbar">
+          <div class="nav-00"><a class="taessa" href="/">GET IT DONE</a></div>
+          <div class="nav-01">
+          <a href="/" class="navlink1">Home</a>
+          <a href="about" class="navlink1">About</a>
+          <a href="contact" class="navlink1">Contact</a>
+          </div>
+        <div class="nav-02">
+          <a href="dashboard" class="gotodash">Go to Dashboard</a>
+          <a href="login" class="navlink2">Log in</a>
+          <div class="navlink2-signup"><a href="signup">Sign Up</a></div>
+        </div>
+      </nav>
+  <!-- Main Body -->
+  <div class="mainpage">
+      <div class="main-01">
+          <div class="default-text">
+              Having difficulty keeping tabs on students in your hall?
+          </div>
+
+          <div class="product-name">
+              Hall Management System
+          </div>
+
+          <div class="description">
+              <p>
+                  A secure and easy system to use, manually write student information in books no more!
+              </p>
+              <p>
+                  A secure and easy system to use, manually write student information in books no more! Create an account
+                  or log in to
+                  get started!
+              </p>
+          </div>
+          <div class="buttons">
+              <a href="dashboard" class="gotodash"
+                  style="width: 50%; text-align: center; justify-content: center; padding: 15px;  border-radius: 10px;">Go
+                  to Dashboard</a>
+              <a href="signup" class="buttons-01">Sign Up</a>
+              <a type="button" class="buttons-or">or</a>
+              <a href="login" class="buttons-02">Log in</a>
+          </div>
+      </div>
+      <div class="main-02">
+          <div class="illustration">
+              <img src="../static/css/LandingPage/images/landing-page.png" alt="" srcset="">
+          </div>
+      </div>
+    </div>
+  </script>
+</html>
