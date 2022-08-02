@@ -4,25 +4,8 @@
 {% endblock %}
 
 {% block body %} 
-<main>
     <h1>SYSTEM TICKETS</h1>
     <div class="tickets">
-        <div class="top">
-            <button id="menu-btn">
-                <span>
-                    <img src="{{url_for('static', filename='images/menu.svg')}}" width="20" height="20">
-                </span>
-            </button>
-            <div class="profile">
-                <div class="info">
-                    <p>Hello, <b>Hubert</b></p>
-                    <small class="text-muted">Admin</small>
-                </div>
-                <div class="profile-photo">
-                    <img src="{{url_for('static', filename='images/hubert.jpg')}}" alt="Profile Picture" >
-                </div>
-            </div>
-        </div>
        <table>
         <thead>
             <tr>
@@ -54,5 +37,4 @@
         </tbody>
        </table>
     </div>
-</main>
 {% endblock %}
