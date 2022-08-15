@@ -22,76 +22,22 @@
             </tr>
         </thead>
         <tbody>
+            {% for row in student %}
             <tr>
-                <td>Asare</td>
-                <td>Hubert Ofosu</td>
-                <td>10715846</td>
-                <td>Male</td>
-                <td>B2105</td>
-                <td>400</td>
-                <td>BSc Information Technology</td>
-                <td>0202585370</td>
+                <td>{{student.surname}}</td>
+                <td>{{student.othernames}}</td>
+                <td>{{student.student_id}}</td>
+                <td>{{student.gender}}</td>
+                <td>{{student.room_number}}</td>
+                <td>{{student.level}}</td>
+                <td>{{student.course}}</td>
+                <td>{{student.contact}}</td>
                 <td class="action">
                     <a href="#">Update</a>
                     <a href="#">Delete</a>
                 </td>
             </tr>
-            <tr>
-                <td>Narh</td>
-                <td>Ama</td>
-                <td>10715867</td>
-                <td>Female</td>
-                <td>B2106</td>
-                <td>200</td>
-                <td>BSc Computer Science</td>
-                <td>0543789135</td>
-                <td class="action">
-                    <a href="#">Update</a>
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
-            <tr>
-                <td>Mensah</td>
-                <td>Edmund</td>
-                <td>10722554</td>
-                <td>Male</td>
-                <td>B2060</td>
-                <td>400</td>
-                <td>BSc Information Technology</td>
-                <td>0502455678</td>
-                <td class="action">
-                    <a href="#">Update</a>
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
-            <tr>
-                <td>Baah</td>
-                <td>Samuel</td>
-                <td>10715765</td>
-                <td>Male</td>
-                <td>B2125</td>
-                <td>300</td>
-                <td>BSc Computer Science</td>
-                <td>0502885490</td>
-                <td class="action">
-                    <a href="#">Update</a>
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
-            <tr>
-                <td>Esther</td>
-                <td>Ama Karl</td>
-                <td>10715847</td>
-                <td>Female</td>
-                <td>B2106</td>
-                <td>100</td>
-                <td>BSc Biological Science</td>
-                <td>0543789135</td>
-                <td class="action">
-                    <a href="#">Update</a>
-                    <a href="#">Delete</a>
-                </td>
-            </tr>
+            {% endfor %}
         </tbody>
        </table>
     </div>

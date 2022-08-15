@@ -1,10 +1,9 @@
-{% extends 'base.html' %}
-
-{% block head %} 
-
-{% endblock %}
-
-{% block body %} 
+<html>
+    <head>
+    <title>STUDENT'S MANUAL REGISTRATION</title>
+            <link rel='stylesheet' href="{{url_for('static', filename='css/Signup.css')}}">
+    </head>
+    <body>
     <div class="container">
         <form name="registration" class="registartion-form" onsubmit="return formValidation()" action="Home.html">
             <table>
@@ -92,5 +91,6 @@
             </table>
           </form>
         </div>
-<script src="{{url_for('static', filename='js/Signupvalid.js')}}"></script>
-{% endblock %}
+    <script src="{{url_for('static', filename='js/Signupvalid.js')}}"></script>
+</body>
+</html>
