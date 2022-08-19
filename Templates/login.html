@@ -9,7 +9,7 @@
 <body>
   <div class="wrapper">
     <h1 class="label">User Login</h1>
-    <form action="/Templates/dashboard.html">
+    <form action="/dashboard">
       <div class="field email">
         <div class="input-area">
           <input type="text" placeholder="Email Address">
@@ -26,11 +26,11 @@
         </div>
         <div class="error error-txt">Password can't be blank</div>
       </div>
-      <div class="pass-txt"><a href="forgotpassword.html">Forgot password?</a></div>
-      <input type="submit" href="/Templates/dashboard.html" value="Login">
+      <div class="pass-txt"><a href="/resetpassword">Forgot password?</a></div>
+      <input type="submit" href="/dashboard" value="Login">
     </form>
     <div class="sign-txt">Don't have an account?
-      <a href="/Templates/signup.html">Sign up</a>
+      <a href="/signup">Sign up</a>
     </div>
   </div>
   <script src="{{url_for('static', filename='js/Login.js')}}"></script>

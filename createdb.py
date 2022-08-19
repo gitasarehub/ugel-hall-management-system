@@ -1,57 +1,37 @@
 import sqlite3
+from traceback import print_list
 
-connection = sqlite3.connect("hallmanagement.db")
-cursor = connection.cursor()
+GET_ALL_STUDENT = """SELECT * FROM Student;"""
 
-cursor.execute("""CREATE TABLE student (student_id integer PRIMARY KEY, 
-                 surname text NOT NULL, othernames text NOT NULL, gender text NOT NULL,
-                 dob datetime, level integer NOT NULL, room_number integer NOT NULL, course text NOT NULL,
-                contact text NOT NULL, emergency_contact text NOT NULL, email text NOT NULL)""")
+CREATE_USER_TABLE = """CREATE TABLE IF NOT EXISTS User (id INTEGER PRIMARY KEY, surname TEXT, othernames TEXT,
+                    portfolio TEXT NOT NULL, email TEXT, username TEXT, password TEXT);"""
 
-cursor.execute("""CREATE TABLE room (room_number text PRIMARY KEY,
-                block text NOT NULL, room_type text NOT NULL)""")
+CREATE_STUDENT_TABLE = """CREATE TABLE IF NOT EXISTS Student (id INTEGER PRIMARY KEY, student_id integer, 
+                    surname text NOT NULL, othernames text NOT NULL, gender text NOT NULL,
+                    dob datetime, level integer NOT NULL, room_number integer NOT NULL, course text NOT NULL,
+                    contact text NOT NULL, email text NOT NULL);"""
 
-cursor.execute("""CREATE TABLE staff (staff_id integer PRIMARY KEY, 
-                surname text NOT NULL, othernames text NOT NULL, gender text NOT NULL, dob datetime NOT NULL, 
-                portfolio text NOT NULL, contact text NOT NULL, home_address text NOT NULL, 
-                email text NOT NULL)""")
-InputStudentData = [(10715846,"Asare", "Hubert",'M','1998-11-04', 400, 1001, "BSc Information Technology",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh"),
-                    (10726840,"Foriwa","Ama",'F','1998-11-04',200, 1005, "BSc Mathematics",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh"),
-                    (10732847,"Asante", "Samuel",'M','1998-11-04',100, 1009, "BA Political Science",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh"),
-                    (10915846,"Narh", "Ama",'F','1998-11-04',300, 1013,"BSc Computer Science",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh"),
-                    (10865891,"Asare", "Larbi",'M','1998-11-04',600, 1002,"BSc Pharmacy",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh"),
-                    (10949849,"Kimbu", "Akosua",'F','1998-11-04',200, 1006,"BSc Earth Science",
-                    "0502885490", "0543789135","haofosu002@st.ug.edu.gh")]
+CREATE_ACTIVITY_LOG = """CREATE TABLE IF NOT EXISTS ActivityLog (id INTEGER PRIMARY KEY, assignee TEXT NOT NULL,
+                        action TEXT NOT NULL, date_created DateTime NOT NULL, person_modified TEXT NOT NULL);"""
 
-InputRoomData = [(1001,'A',"4 in 1"),(1002,'B',"4 in 1"),(1003,'C',"4 in 1"),(1004,'D',"2 in 1"),
-                 (1005,'A',"2 in 1"),(1006,'B',"4 in 1"),(1007,'C',"2 in 1"),(1008,'D',"4 in 1"),
-                 (1009,'A',"4 in 1"),(1010,'B',"2 in 1"),(1011,'C',"4 in 1"),(1012,'D',"2 in 1"),
-                 (1013,'A',"4 in 1"),(1014,'B',"4 in 1"),(1015,'C',"4 in 1"),(1016,'D',"4 in 1")]
+# Student_Asare = [(student_id=10715846, surname='Asare', othernames='Hubert','Male', 400, 1001, "BSc Information Technology",
+#                      '0502885490',email='haofosu002@st.ug.edu.gh'),
+#                      (10726840,"Foriwa","Ama",'F','1998-11-04',200, 1002, "BSc Mathematics",
+#                       "0543789135","haofosu002@st.ug.edu.gh"),
+#                      (10732847,"Asante", "Samuel",'M','1998-11-04',100, 1003, "BA Political Science",
+#                         "0543789135","asantesamuel002@st.ug.edu.gh"),
+#                      (10917195,"Narh", "Ama",'F','1998-11-04',300, 1044,"BSc Computer Science",
+#                      "0543789135","haofosu002@st.ug.edu.gh"),
+#                      (10865891,"Asare", "Larbi",'F','1998-11-04',600, 2102,"BSc Pharmacy",
+#                      "0505885490","larbi02@yahoo.com"),
+#                      (10949849,"Kimbu", "Akosua",'F','1998-11-04',200, 3006,"BSc Earth Science",
+#                      "0502885490","kimbu@gmail.com")]
 
-InputStaffData = [(101,"Kumi", "Herbman",'M','1991-11-04', "Tutor",
-                    "0502885490", "GA-0343-348-3","haofosu002@st.ug.edu.gh"),
-                    (102,"Serwaa","Ansah",'F','1971-11-04', "Porter",
-                    "0502885490", "GA-0343-348-4","haofosu002@st.ug.edu.gh"),
-                    (103,"Sunku", "Tetteh",'M','1983-11-04',"Porter",
-                    "0502885490", "GA-0343-348-5","haofosu002@st.ug.edu.gh"),
-                    (104,"Aba", "Florence",'F','1988-11-04', "Electrican",
-                    "0502885490", "GA-0343-348-6","haofosu002@st.ug.edu.gh"),
-                    (105,"Asa", "Bonsu",'M','1998-11-04', "Carpenter",
-                    "0502885490", "GA-0343-348-7","haofosu002@st.ug.edu.gh"),
-                    (106,"Banba", "Nortey",'M','1997-11-04', "Plumber",
-                    "0502885490", "GA-0343-348-8","haofosu002@st.ug.edu.gh")]
-
-cursor.executemany("insert into student values (?,?,?,?,?,?,?,?,?,?,?)", InputStudentData)
-
-cursor.executemany("insert into room values (?,?,?)", InputRoomData)
-
-cursor.executemany("insert into staff values (?,?,?,?,?,?,?,?,?)", InputStaffData)
-
-connection.commit()
-
-connection.close()
+connect = sqlite3.connect("hallmanagement.db") 
+# connect.execute(CREATE_STUDENT_TABLE)
+# connect.execute(CREATE_ACTIVITY_LOG)
+# connect.execute(CREATE_USER_TABLE)
+# connect.executemany("""INSERT INTO Student (student_id, surname, othernames, gender, dob, level, room_number, course, contact, email)
+#                     VALUES(?,?,?,?,?,?,?,?,?,?);""", InputStudentData)
+# connect.commit()
+# connect.close()
