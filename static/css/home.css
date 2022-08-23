@@ -15,7 +15,7 @@ section{
   justify-content: space-between;
   align-items: center;
   background: #fff;
-  background-image: url(/images/Homebackground.jpg);
+  background-image: url(/static/images/structures.jpg);
   background-position: center;
   background-size: cover;
 
@@ -48,6 +48,10 @@ header ul li a{
   font-weight: 400;
   margin-left: 40px;
   text-decoration: none;
+}
+p span{
+  font-weight: 600;
+  color: wheat;
 }
 .content{
   position: relative;
@@ -84,6 +88,10 @@ font-weight: 900;
   font-weight: 500;
   letter-spacing: 1px;
   text-decoration: none;
+}
+.content .textBox a:hover{
+  background: rgb(32, 60, 107);
+
 }
 .content .imgBox{
   width: 600px;

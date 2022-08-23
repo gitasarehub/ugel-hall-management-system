@@ -151,48 +151,48 @@ def dashboard():
 
 # Addstudents Page
 @app.route('/addstudent', methods=['POST', 'GET'])
-@login_required
+# @login_required
 def addStudent():
-    if request.method == 'POST':
-        surname = request.form['surname'].title()
-        othernames = request.form['othernames'].title()
-        student_id = request.form['student_id'].capitalize()
-        gender = request.form['gender'].title()
-        room_number = request.form['room_number']
-        contact = request.form['contact']
-        course = request.form['course'].title()
-        email = request.form['email'].title()
+    # if request.method == 'POST':
+    #     surname = request.form['surname'].title()
+    #     othernames = request.form['othernames'].title()
+    #     student_id = request.form['student_id'].capitalize()
+    #     gender = request.form['gender'].title()
+    #     room_number = request.form['room_number']
+    #     contact = request.form['contact']
+    #     course = request.form['course'].title()
+    #     email = request.form['email'].title()
 
 
-        data = Student(
-            surname=surname,
-            othernames=othernames,
-            student_name=surname + " " + othernames,
-            student_id=student_id,
-            gender=gender,
-            room_number=room_number,
-            contact=contact,
-            course=course,
-            email= email
-        )
-        activity = ActivityLog(
-            assignee=session['user'],
-            action="Added a new student",
-            person_modified=surname + " " + othernames
-        )
+    #     data = Student(
+    #         surname=surname,
+    #         othernames=othernames,
+    #         student_name=surname + " " + othernames,
+    #         student_id=student_id,
+    #         gender=gender,
+    #         room_number=room_number,
+    #         contact=contact,
+    #         course=course,
+    #         email= email
+    #     )
+    #     activity = ActivityLog(
+    #         assignee=session['user'],
+    #         action="Added a new student",
+    #         person_modified=surname + " " + othernames
+    #     )
 
-    try:
-            db.session.add(data)
-            db.session.add(activity)
-            db.session.commit()
-            flash("Student successfully added")
-            return redirect("/addstudent")
-    except:
-            return render_template('ErrorID.html')
+    # try:
+    #         db.session.add(data)
+    #         db.session.add(activity)
+    #         db.session.commit()
+    #         flash("Student successfully added")
+    #         return redirect("/addstudent")
+    # except:
+    #         return render_template('ErrorID.html')
 
-    else:
-        order = Student.query.order_by(Student.student_id).all()
-        return render_template('Add_Student.html', tasks=order,)
+    # else:
+    #     order = Student.query.order_by(Student.student_id).all() ------return render_template('Add_Student.html', tasks=order,)
+        return render_template('addstudent.html')
 
 # Database Page
 @app.route('/database', methods=['POST','GET'])

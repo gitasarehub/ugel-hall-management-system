@@ -1,16 +1,94 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<title>
-    Dashboard
-</title>
+    <!-- Required meta tags
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="UGEL HALL MANAGEMENT SYSTEM">
+    <meta name="author" content="END OF COURSE PROJECT">
+    <meta name="keywords" content="UGEL HALL MANAGEMENT"> -->
+    <title>Dashboard</title>
 {% endblock %}
 
-{% block body %} 
-<main>
-    <h1>Dashboard</h1>
-    <div class="date">
+{% block body %}
+<h1>DASHBOARD</h1>
+<div class="date">
         <input type="date">
+</div>
+<div class="tabs">
+    <div class="group-search-tabs">
+    <div class="a-tab">
+        <span> <img class="btn" src="{{url_for('static', filename='images/content_search.svg')}}"></span>
+        <div class="middle">
+            <div class="left">
+                <h2>SEARCH STUDENT</h2>
+            </div>
+        </div>
+    <small class="text-muted">Search Student By Name or Student ID</small>
     </div>
-</main>
+    <div class="a-tab" id="gender-analytics">
+        <span> <img class="btn" src="{{url_for('static', filename='images/auto_graph_FILL0_wght400_GRAD0_opsz48.svg')}}"></span>
+        <div class="middle">
+            <div class="left">
+                <h3>TOTAL HALL RESIDENTS</h3>
+                <h2>MALE: 1060</h2>
+                <h2>FEMALE: 2556</h2>
+            </div>
+            <div class="progress">
+                <svg>
+                    <circle cx="38" cy="38" r="36"></circle>
+                </svg>
+                <div class="number">
+                    <p>81%</p>
+                </div>
+            </div>
+        </div>
+    <small class="text-muted">Last 24 Hours</small>
+    </div>
+    </div>
+    <div class="a-tab">
+        <span> <img class="btn" src="{{url_for('static', filename='images/event_FILL0_wght400_GRAD0_opsz48.svg')}}"></span>
+        <div class="middle">
+            <div class="left">
+                <h3>UPCOMING HALL EVENTS</h3>
+            </div>
+        </div>
+    <p class="text-muted">JCR Elections coming off on the 2nd of September</p>
+    </div>
+</div>
+
+<!-------------------------------- Dashboard's system logs ----------------------------->
+<h3 style="text-align:center;color:#677483;">SYSTEM LOGS</h3>
+<div class="tickets">
+    <table>
+        <thead>
+            <tr>
+                <th>User</th>
+                <th>Action</th>
+                <th>Data</th>
+                <th>Timestamp</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>hubert</td>
+                <td>Updated student details</td>
+                <td>Ama Narh</td>
+                <td>Today 9:00 am</td>
+            </tr>
+            <tr>
+                <td>ofosu</td>
+                <td>Updated student details</td>
+                <td>Baah Yirenkyi</td>
+                <td>Yesterday 3:29 pm</td>
+            </tr>
+            <tr>
+                <td>asare</td>
+                <td>Added a new student</td>
+                <td>Edmund Mensah Adanor</td>
+                <td>Monday 5:04 pm</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 {% endblock %}

@@ -1,5 +1,5 @@
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap'); */
-
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@100;300;400;500;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Marck+Script&family=Poppins:wght@100;300;400;500;600;700;800&display=swap');
 /* _______________________________ROOT VARIABLES _______________________________*/
 :root{
     --color-primary: #7380ec;
@@ -197,6 +197,48 @@ main .top .profile{
     text-align: right;
     align-items: center;
 }
+
+/* ================== DASHBOARD ===================== */
+main .date{
+    display: inline;
+    background: var(--color-light);
+    border-radius: var(--border-radius-1);
+    margin-top: 1rem;
+    padding: 0.5rem 1.6rem;
+}
+main .date input[type='date']{
+    background: transparent;
+    color: var(--color-dark);
+}
+main #gender-analytics{
+   align-content: center;
+    color: #111e88;
+}
+main .group-search-tabs{
+    display: grid;
+    grid-template-rows: 0.8fr 0.8fr;
+    gap: 1rem;
+}
+main .tabs{
+    margin-top: 1rem;
+    margin-bottom: 2rem;
+    display: grid;
+    grid-template-columns:0.8fr 1.6fr;
+    gap: 1.6rem;
+}
+main .a-tab{
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 0.5rem;
+    box-shadow: var(--box-shadow-2);
+    transition: all 500ms ease;
+}
+main .a-tab:hover{
+    box-shadow: none;
+}
+
+
 
 /* ================== SYSTEM TICKET===================== */
 main{
