@@ -31,6 +31,17 @@ header{
   justify-content: space-between;
   align-items: center;
 }
+header .header-01{
+  display: flex;
+  gap: 0.2rem;
+  align-items: center;
+}
+header .header-01 h1{
+  color: wheat;
+}
+header .header-01 h1 span{
+  color: white !important;
+}
 header .logo{
   position: relative;
   max-width: 80px;
@@ -38,6 +49,7 @@ header .logo{
 header ul{
   position: relative;
   display: flex;
+  margin-right: 2rem;
 }
 header ul li{
   list-style: none;
@@ -45,9 +57,14 @@ header ul li{
 header ul li a{
   display: inline-block;
   color: white;
-  font-weight: 400;
+  font-weight: 600;
   margin-left: 40px;
   text-decoration: none;
+  padding: 0.2rem;
+  font-size: large;
+}
+header ul li a:hover{
+  color: #ffbb55;
 }
 p span{
   font-weight: 600;
@@ -67,7 +84,7 @@ p span{
 .content .textBox h2{
   color: white;
   font-size: 4em;
-  line-height: 1.4em;
+  line-height: 1em;
   font-weight: 500;
 }
 .content .textBox h2 span{
@@ -76,16 +93,18 @@ font-size: 1.2em;
 font-weight: 900;
 }
 .content .textBox p{
+  margin-top: 1rem;
+  margin-left: 5px;
   color:white ;
 }
 .content .textBox a{
   display: inline-block;
   margin-top: 20px;
-  padding: 8px 20px;
+  padding: 8px 18px;
   background: #ffbb55;
   color: #fff;
-  border-radius: 40px;
-  font-weight: 500;
+  border-radius: 3rem;
+  font-weight: 600;
   letter-spacing: 1px;
   text-decoration: none;
 }
@@ -97,8 +116,8 @@ font-weight: 900;
   width: 600px;
   display: flex;
   justify-content: flex-end;
-  padding-right: 50px ;
-  margin-top: 50px;
+  padding-right: 41px ;
+  margin-top: 35px;
 }
 .content .imgBox img{
   max-width: 340px;

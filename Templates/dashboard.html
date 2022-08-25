@@ -11,55 +11,87 @@
 {% endblock %}
 
 {% block body %}
-<h1>DASHBOARD</h1>
+<h1 style="color:#363949"">DASHBOARD</h1>
 <div class="date">
         <input type="date">
 </div>
 <div class="tabs">
-    <div class="group-search-tabs">
-    <div class="a-tab">
-        <span> <img class="btn" src="{{url_for('static', filename='images/content_search.svg')}}"></span>
-        <div class="middle">
-            <div class="left">
-                <h2>SEARCH STUDENT</h2>
-            </div>
-        </div>
-    <small class="text-muted">Search Student By Name or Student ID</small>
-    </div>
-    <div class="a-tab" id="gender-analytics">
-        <span> <img class="btn" src="{{url_for('static', filename='images/auto_graph_FILL0_wght400_GRAD0_opsz48.svg')}}"></span>
-        <div class="middle">
-            <div class="left">
-                <h3>TOTAL HALL RESIDENTS</h3>
-                <h2>MALE: 1060</h2>
-                <h2>FEMALE: 2556</h2>
-            </div>
-            <div class="progress">
-                <svg>
-                    <circle cx="38" cy="38" r="36"></circle>
-                </svg>
-                <div class="number">
-                    <p>81%</p>
+    <div class="group-tabs">
+    <div class="a-tab" id="search">
+        <div class="outer-middle">
+            <span> <img class="btn" src="{{url_for('static', filename='images/screen_search_desktop_FIlled_white.svg')}}"></span>
+            <div class="middle">
+                <div class="left">
+                    <h2>SEARCH STUDENT</h2>
+                    <small class="text-muted">Search Student By Name or ID</small>
                 </div>
             </div>
         </div>
-    <small class="text-muted">Last 24 Hours</small>
     </div>
-    </div>
-    <div class="a-tab">
-        <span> <img class="btn" src="{{url_for('static', filename='images/event_FILL0_wght400_GRAD0_opsz48.svg')}}"></span>
-        <div class="middle">
-            <div class="left">
-                <h3>UPCOMING HALL EVENTS</h3>
+    <a href="/database">
+        <div class="a-tab" id="gender-analytics">
+            <span> <img class="btn" src="{{url_for('static', filename='images/bar_chart_white.svg')}}"></span>
+            <div class="middle">
+                <div class="left">
+                    <h3>TOTAL HALL RESIDENTS</h3>
+                    <h2>MALE: <span id="dash-ans">1060</span></h2>
+                    <h2>FEMALE: <span id="dash-ans">2556</span></h2>
+                </div>
+                <div class="progress">
+                    <svg>
+                        <circle cx="42" cy="42" r="40"></circle>
+                    </svg>
+                    <div class="number">
+                        <p>89%</p>
+                    </div>
+                </div>
+            </div>
+            <div class="text-belowcard">
+                <small class="text-likemuted">Hall: <span id="dash-ans">Elizabeth Frances Sey</span></small>
+                <small class="text-muted">Percentage of Beds Available</small>
             </div>
         </div>
-    <p class="text-muted">JCR Elections coming off on the 2nd of September</p>
+    </a>
+    </div>
+    <div class="a-tab" id="upcoming-events">
+        <div class="class-events">
+            <span> <img class="btn" src="{{url_for('static', filename='images/edit_calendar_white.svg')}}"></span>
+            <div class="middle">
+                <div class="left">
+                    <h3>UPCOMING HALL EVENTS</h3>
+                </div>
+            </div>
+        </div>
+    <div class="events-table">
+        <table>
+            <thead>
+                <tr>
+                <th>Event</th>
+                <th>Date</th>
+                </tr>
+            </thead>
+            <tbody class="event-info">
+                <tr>
+                    <td class="text-muted">Elizabeth Sey JCR Elections</td>
+                    <td class="text-muted">2nd September 2022</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Vacation Begins</td>
+                    <td class="text-muted">28th September 2022</td>
+                </tr>
+                <tr>
+                    <td class="text-muted">Hall Fumigation Exercise</td>
+                    <td class="text-muted">1st October 2022</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
     </div>
 </div>
 
 <!-------------------------------- Dashboard's system logs ----------------------------->
-<h3 style="text-align:center;color:#677483;">SYSTEM LOGS</h3>
-<div class="tickets">
+<h3 style="text-align: center; color:#363949">SYSTEM LOGS</h3>
+<div class="tickets" id="dashboard-logs">
     <table>
         <thead>
             <tr>
@@ -90,5 +122,8 @@
             </tr>
         </tbody>
     </table>
+    <div class="show-all">
+        <a href="/systemtickets">Show All</a>
+    </div>
 </div>
 {% endblock %}
