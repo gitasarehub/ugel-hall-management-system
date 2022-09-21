@@ -1,94 +1,94 @@
 {% extends 'base.html' %}
 
-{% block head%}
-<!-- Required meta tags-->
-<!-- <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="UGEL HALL MANAGEMENT SYSTEM">
-<meta name="author" content="END OF COURSE PROJECT">
-<meta name="keywords" content="UGEL HALL MANAGEMENT"> -->
-<link rel="stylesheet" href="{{url_for('static', filename='css/addstudent.css')}}">
-<!-- Title Page-->
-<title>Add Students</title>
+{% block head %}
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+    <title>UGEL - Add Student</title>
+{% endblock %}
 
-<script>
-    function allowNumbersOnly(e) {
-        var code = (e.which) ? e.which : e.keyCode;
-        if (code > 31 && (code < 48 || code > 57)) {
-            e.preventDefault();
-        }
-    }
-</script>
-{% endblock%}
-{% block body%}
+{% block body %}
+<h1 id="topic">ADD STUDENT</h1>
+<div class="container">
+    <header>Fill Student Details</header>
 
+    <form action="#" method="post">
+            <div class="form first">
+                <div class="details personal">
+                    <div class="fields">
+                        <div class="input-field">
+                            <label>Student ID</label>
+                            <input name="student_id" type="text" required>
+                        </div>
+                        <div class="input-field" >
+                            <label>Surname</label>
+                            <input name="surname" type="text" required>
+                        </div>
 
+                        <div class="input-field">
+                            <label>Other Names</label>
+                            <input name="othernames" type="text" required>
+                        </div>
 
+                        <div class="input-field">
+                            <label>Gender</label>
+                            <select name="gender" required>
+                                <option disabled selected>Select gender</option>
+                                <option value="Male">Male</option>
+                                <option value="Female">Female</option>
+                            </select>
+                        </div>
 
-<div class="card-body">
-    <h2 class="title">Add Student Form</h2>
-    <form action="" method="POST" onsubmit="return ValidateForm();">
-        <div class="row-space">
-            <div class="col-2">
-                <div class="input-group">
-                    <label for="surname" class="label">Surname</label>
-                    <input class="input" type="text" id= "surname" name="surname" required>
+                        <div class="input-field">
+                            <label>Hall</label>
+                            <select name="hall" required>
+                                <option disabled selected>Select Hall</option>
+                                <option value="Dr. Hilla Limann" >Dr. Hilla Limann</option>
+                                <option value="Alexander Kwapong" >Alexander Kwapong</option>
+                                <option value="Elizabeth Frances Sey" >Elizabeth Frances Sey</option>
+                                <option value="Jean Aka Nelson" >Jean Aka Nelson</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Level</label>
+                            <select name="level" required>
+                                <option disabled selected>Select Level</option>
+                                <option value="100" >100</option>
+                                <option value="200" >200</option>
+                                <option value="300" >300</option>
+                                <option value="400" >400</option>
+                                <option value="500" >500</option>
+                                <option value="600" >600</option>
+                            </select>
+                        </div>
+
+                        <div class="input-field">
+                            <label>Room Number</label>
+                            <input name="room_number" type="text" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Phone Number</label>
+                            <input name="contact" type="text" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Course</label>
+                            <input name="course" type="text" required>
+                        </div>
+                        <div class="input-field">
+                            <label>Email</label>
+                            <input name="email" type="text" required>
+                        </div>
+                    </div>                        
+                    <button class="sumbit" type="submit">
+                        <span class="btnText">Add Student</span>
+                        <i class="uil uil-navigator"></i>
+                    </button>
                 </div>
-            </div>
-            <div class="col-2">
-                <div class="input-group">
-                    <label for="othernames" class="label">Othernames</label>
-                    <input class="input" type="text" id= "othernames" name="othernames" required>
-                </div>
-            </div>
-        </div>
-        <div class="row-space">
-            <div class="col-2">
-                <div class="input-group">
-                    <label for="student_id" class="label">Student ID</label>
-                    <div class="input-group-icon">
-                        <input class="input" type="text" id="student_id" name="student_id" maxlength="8 " minlength="8" 
-                            onkeypress="allowNumbersOnly(event)">
-                    </div>
-                </div>
-            </div>
-            <div class="col-2">
-                <div class="input-group">
-                    <label class="label">Gender</label>
-                    <div class="p-t-10">
-                        <label for="gender_male" class="radio-container m-r-45">Male
-                            <input id="gender_male" type="radio" name="gender" value="Male" required>
-                            <span class="checkmark"></span>
-                        </label>
-                        <label for="gender_female" class="radio-container">Female
-                            <input id="gender_female" type="radio" name="gender" value="Female" required>
-                            <!-- <span class="checkmark"></span> -->
-                        </label>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row row-space">
-            <div class="col-2">
-                <div class="input-group">
-                    <label for="room_number" class="label">Room Number</label>
-                    <input id="room_number" class="input" type="text" name="roomnumber">
-                </div>
-            </div>
-                <div class="col-2">
-                    <div class="input-group">
-                        <label for="contact" class="label">Contact</label>
-                        <input id="contact" class="input--style-4" type="text" name="phone" maxlength="10" minlength="10" onkeypress="allowNumbersOnly(event)">
-                    </div>
-                </div>
-        </div>
-        <div class="input-group">
-            <label for="course" class="label">Course</label>
-            <input id="course" class="input--style-4" type="text" name="course">
-        </div>
-        <div class="button">
-            <button class="btn" type="submit" id="submitbutton" name="Submit">Submit</button>
-        </div>
+            </div> 
     </form>
 </div>
-{% endblock%}
+<script>
+    const icons = document.querySelector(".add-icon");
+    icons.classList.add("active")
+</script>
+{% endblock %}

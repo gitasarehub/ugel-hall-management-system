@@ -8,7 +8,6 @@
 <meta name="author" content="END OF COURSE PROJECT">
 <meta name="keywords" content="UGEL HALL MANAGEMENT">
     <link rel="stylesheet" href="{{url_for('static', filename='css/main.css')}}">
-   
 
     {% block head %} {% endblock %}
 </head>
@@ -25,31 +24,31 @@
                 </div>
             </div>
             <div class="sidebar">
-                <a href="/dashboard">
+                <a href="/dashboard" class="icon dash-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/dashboard.svg')}}"></span>
                     <h4>Dashboard</h4>
                 </a>
-                <a href="/addstudent">
+                <a href="/addstudent" class="icon add-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/person_add.svg')}}"></span>
                     <h4>Add Student</h4>
                 </a>
-                <a href="/database" class="active">
+                <a href="/database" class="icon data-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/database.svg')}}"></span>
                     <h4>Database</h4>
                 </a>
-                <a href="/porterslodge">
+                <a href="/porterslodge" class="icon lodge-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/holiday_village.svg')}}"></span>
                     <h4>Porters Lodge</h4>
                 </a>
-                <a href="/systemtickets">
+                <a href="/systemtickets" class="icon tickets-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/settings.svg')}}"></span>
-                    <h4>System Ticket</h4>
+                    <h4>System Logs</h4>
                 </a>
-                <a href="/about_us">
+                <a href="/about_us" class="icon about-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/person.svg')}}"></span>
                     <h4>About Us</h4>
                 </a>
-                <a href="/">
+                <a href="/logout">
                     <span> <img id="logout" class="btn" src="{{url_for('static', filename='images/logout.svg')}}"></span>
                     <h4>Logout</h4>
                 </a>
@@ -65,8 +64,11 @@
                 </button>
                 <div class="profile">
                     <div class="info">
-                        <p>Hello, <b>Hubert</b></p>
-                        <small class="text-muted">Admin</small>
+                        {% if current_user.is_authenticated %}
+                        <p>Hello, <b>{{ current_user.username }}</b></p>
+                        <small class="text-muted">{{current_user.hall}},</small>
+                        <small class="text-muted">{{current_user.portfolio}}</small>
+                        {% endif %}
                     </div>
                     <div class="profile-photo">
                         <img src="{{url_for('static', filename='images/hubert.jpeg')}}" width= "40" height= "50">
@@ -80,5 +82,6 @@
         </main>
     </div>
     <script src="{{url_for('static', filename='js/index.js')}}"></script>
+
 </body>
 </html>

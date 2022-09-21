@@ -204,8 +204,13 @@ main .top .profile{
     text-align: right;
     align-items: center;
 }
-
+.profile .info .text-muted{
+    color: var(--color-success-2);
+}
 /* _____________________________==== DASHBOARD ====_____________________________ */
+main #topic{
+    color: var(--color-dark);
+}
 main .group-tabs{
     display: grid;
     grid-template-rows: 0.8fr 0.8fr;
@@ -245,16 +250,21 @@ main .a-tab .middle{
     justify-content: space-between;
 }
 /* _______________ DATE _______________ */
-main .date{
+main .date-time{
     display: inline;
     background: var(--color-light);
     border-radius: var(--border-radius-1);
     margin-top: 1rem;
-    padding: 0.5rem 1.6rem;
+    padding: 0.7rem 1.6rem;
+    justify-content: space-between;
 }
-main .date input[type='date']{
+main .date-time input{
     background: transparent;
-    color: var(--color-dark);
+    color: var(--color-primary-variant);
+    font-size: 1.2rem;
+    font-weight: 600;
+    text-align: center;
+    font-family: sans-serif;
 }
 
 /* _______________ SEARCH TAB _______________ */
@@ -291,16 +301,8 @@ main #gender-analytics h3{
     margin: 1rem 0 0.6rem;
     font-size: 1rem;
 }
-main #gender-analytics .text-belowcard{
-    display: flex;
-    justify-content: space-between;
-}
-main #gender-analytics .text-belowcard .text-muted{
-    font-size: 0.9rem;
-    font-weight: 200;
-    margin-top: 0.18rem;
-}
-main #gender-analytics .text-belowcard .text-likemuted{
+
+main #gender-analytics .middle .left .text-likemuted{
     font-size: 0.97rem;
     font-weight: 600;
 }
@@ -308,38 +310,44 @@ main #gender-analytics #dash-ans{
     color: var(--color-warining);
 }
 main .a-tab .progress{
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    align-items: center;
+}
+.a-tab .progress .circular-progress{
     position: relative;
-    width: 92px;
-    height: 92px;
+    height: 100px;
+    width: 100px;
     border-radius: 50%;
-    margin-right: 2.8rem
+    background: conic-gradient(#ffbb55 3.6deg,#ededed 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.a-tab .progress .circular-progress::before{
+    content: "";
+    position: absolute;
+    height: 80px;
+    width: 80px;
+    background-color: #fff;
+    border-radius: 50%;
+}
+.progress .circular-progress .progress-value{
+    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--color-warining);
+}
+.circular-progress .progress-value .text{
+    font-size: 30px;
+    font-weight: 500;
+    color: var(--color-info-dark);
+    text-align: center;
 }
 main .a-tab svg{
     width: 7rem;
     height: 7rem;
-}
-main .a-tab svg circle{
-    fill: none;
-    stroke: var(--color-warining);
-    stroke-width: 10;
-    stroke-linecap: round;
-    transform: translate(7px, 7px);
-    stroke-dashoffset: -30;
-    stroke-dasharray: 200;
-}
-main .a-tab .progress .number{
-    position: absolute;
-    top: 0;
-    left: 0;
-    margin-left: 0.3rem;
-    margin-top: 0.3rem;
-    height: 100%;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 0.99rem;
-    font-weight: 500;
 }
 
 /* __________ UPCOMING EVENTS TAB __________ */
@@ -373,7 +381,7 @@ main .events-table tbody td{
 main .events-table tbody tr:last-child td{
     border: none;
 }
-main .events-table table thead tr{
+main .events-table table thead th{
     font-size: large;
     color: var(--color-warining);
 }
@@ -412,6 +420,10 @@ main .tickets tbody td{
 main #dashboard-logs tbody td{
     color: var(--color-dark-variant);
 }
+main thead th{
+    font-size: 1.3rem;
+    color: var(--color-dark);
+}
 main #dashboard-logs thead th{
     color: var(--color-dark);
 }
@@ -449,17 +461,166 @@ main .tickets .show-all a:hover{
 main tbody .action{
     display:grid;
 }
+main tbody #visitors{
+    display: inline;
+    background: var(--color-danger);
+}
 main tbody .action a{
     margin-top: 0.1rem;
     color: var(--color-warining);
 }
-main tbody .action a:hover{
+main tbody .sign-out a,main tbody .action a{
+    transition: all 300ms ease;
+
+}
+main tbody .sign-out a:hover,main tbody .action a:hover{
     color: var(--color-primary);
+    font-size: 0.95rem;
 }
 
 /* _________________________===== ADD STUDENT =====_________________________ */
+main .container header{
+    position: relative;
+    font-size: 20px;
+    font-weight: 600;
+    color: #333;
+}
+main .container form{
+    position: relative;
+    margin-top: 16px;
+    min-height: 490px;
+    overflow: hidden;
+}
+main .container form .title{
+    display: block;
+    margin-bottom: 8px;
+    font-size: 16px;
+    font-weight: 500;
+    margin: 6px 0;
+    color: #333;
+}
+main .container form .fields{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+form .fields .input-field{
+    display: flex;
+    width: calc(100% / 2 - 15px);
+    flex-direction: column;
+    margin: 4px 0;
+}
+.input-field label{
+    font-size: 12px;
+    font-weight: 500;
+    color: #2e2e2e;
+}
+.input-field input, select{
+    outline: none;
+    font-size: 14px;
+    font-weight: 400;
+    color: #333;
+    border-radius: 5px;
+    border: 1px solid #aaa;
+    padding: 0 15px;
+    height: 42px;
+    margin: 8px 0;
+}
+.input-field input :focus,
+.input-field select:focus{
+    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
+}
+main .container form button, .btnText{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 45px;
+    max-width: 200px;
+    width: 100%;
+    border: none;
+    outline: none;
+    color: #fff;
+    border-radius: 5px;
+    margin: 25px 0;
+    background-color:var(--color-dark-variant);
+    transition: all 0.3s linear;
+    cursor: pointer;
+}
+.btnText:hover{
+    background: #2e2e2e;
+}
+main .container form .btnText{
+    font-size: 14px;
+    font-weight: 400;
+}
+main .container form button:hover{
+    background-color:var(--color-dark);
+}
+main .container form .buttons{
+    display: flex;
+    align-items: center;
 
+}
 
+@media (max-width: 750px) {
+   main .container form{
+        overflow-y: scroll;
+    }
+   main .container form::-webkit-scrollbar{
+       display: none;
+    }
+   main .container form .fields .input-field{
+        width: calc(100% / 2 - 15px);
+    }
+}
+
+@media (max-width: 550px) {
+    form .fields .input-field{
+        width: 100%;
+    }
+}
+
+/* _________________________===== PORTER'S LODGE =====_________________________ */
+
+main .porterslodge .lodge{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: grid;
+    gap: 1.5rem;
+    
+}
+main .porterslodge .lodge a{
+    color: var(--color-dark-variant);
+}
+main .porterslodge .lodge .ports{
+    display: grid;
+    justify-content: space-around;
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 0.5rem;
+    box-shadow: var(--box-shadow);
+    transition: all 300ms ease;
+    text-align: center;
+}
+main .porterslodge .lodge .ports:hover{
+    box-shadow: none;
+    color: var(--color-white);
+    background: var(--color-success-2);
+}
+main .porterslodge .lodge .ports img{
+    height: 4rem;
+}
+main .porterslodge .lodge .ports #logkey{
+    margin-left: 1.3rem;
+}
+main .porterslodge .lodge .ports #logbook{
+    margin-left: 5.1rem;
+}
+main .porterslodge .lodge .ports #complaint{
+    margin-left: 7rem;
+}
 /* ===========================MEDIA QUERIES(for tablets and medium size phones)=========================== */
 @media screen and (max-width: 1200px){
     .container{
@@ -486,6 +647,69 @@ main tbody .action a:hover{
     main .tickets table{
         width: 83vw;
     }
+
+    /* _____________________________==== DASHBOARD ====_____________________________ */
+main #topic{
+    color: var(--color-dark);
+}
+main .group-tabs{
+    display: grid;
+    grid-template-rows: 0.8fr 0.8fr;
+    gap: 0.5rem;
+}
+main .tabs{
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    display: grid;
+    grid-template-columns:0.8fr 1.6fr;
+    gap: 1.1rem;
+    color: var(--color-dark-variant);
+}
+main .a-tab{
+    background: var(--color-white);
+    padding: var(--card-padding);
+    border-radius: var(--card-border-radius);
+    margin-top: 0.5rem;
+    box-shadow: var(--box-shadow);
+    transition: all 300ms ease;
+}
+/* main .a-tab #upcoming-events{
+    height: 100vh;
+} */
+main .a-tab:hover{
+    box-shadow: none;
+    background: var(--color-success-2);
+}
+main .a-tab span img{
+    background: var(--color-warining);
+    padding: 0.5rem;
+    border-radius: 20%;
+    color: var(--color-white);
+    font-size: 2rem;
+    width: 8vh;
+}
+main .a-tab .middle{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+/* _______________ DATE _______________ */
+main .date-time{
+    display: inline;
+    background: var(--color-light);
+    border-radius: var(--border-radius-1);
+    margin-top: 1rem;
+    padding: 0.7rem 1rem;
+    justify-content: space-between;
+}
+main .date-time input{
+    background: transparent;
+    color: var(--color-primary-variant);
+    font-size: 1.2rem;
+    font-weight: 500;
+    text-align: center;
+    font-family: sans-serif;
+}
 }
 
 

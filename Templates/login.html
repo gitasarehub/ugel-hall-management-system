@@ -9,10 +9,23 @@
 <body>
   <div class="wrapper">
     <h1 class="label">User Login</h1>
-    <form action="/dashboard">
-      <div class="field email">
+    <div class="display-message">
+      {% with messages = get_flashed_messages() %}
+          {% if messages %}
+          <ul>
+            {% for message in messages %}
+            <li>{{ message }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        {% endwith %}
+    </div>
+    <br>
+
+    <form method="post" name="login" action="#">
+      <div class="field username">
         <div class="input-area">
-          <input type="text" placeholder="Email Address">
+          <input type="text" name="username" placeholder="username">
           <i class="icon fas fa-envelope"></i>
           <i class="error error-icon fas fa-exclamation-circle"></i>
         </div>
@@ -20,19 +33,19 @@
       </div>
       <div class="field password">
         <div class="input-area">
-          <input type="password" placeholder="Password">
+          <input type="password" name="password" placeholder="Password">
           <i class="icon fas fa-lock"></i>
           <i class="error error-icon fas fa-exclamation-circle"></i>
         </div>
         <div class="error error-txt">Password can't be blank</div>
       </div>
       <div class="pass-txt"><a href="/resetpassword">Forgot password?</a></div>
-      <input type="submit" href="/dashboard" value="Login">
+      <input type="submit" value="Login">
     </form>
     <div class="sign-txt">Don't have an account?
       <a href="/signup">Sign up</a>
     </div>
   </div>
-  <script src="{{url_for('static', filename='js/Login.js')}}"></script>
+  <!-- <script src="{{url_for('static', filename='js/Login.js')}}"></script> -->
 </body>
 </html>>

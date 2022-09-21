@@ -1,50 +1,52 @@
 {% extends 'base.html' %}
 
 {% block head %}
-<!-- Required meta tags-->
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-<meta name="description" content="UGEL HALL MANAGEMENT SYSTEM">
-<meta name="author" content="END OF COURSE PROJECT">
-<meta name="keywords" content="UGEL HALL MANAGEMENT"> 
 <title>Database</title>
 {% endblock %}
 
 {% block body %} 
 <h1>DATABASE</h1>
     <div class="tickets">
+        {% if Students|length < 1 %}
+        <h3 style="text-align: center; color: #7d8da1;" >There are no Students in Database Please add one</h3>
+        {% else %}
        <table>
         <thead>
             <tr>
-                <th>SURNAME NAME</th>
-                <th>OTHER NAMES</th>
                 <th>ID</th>
-                <th>GENDER</th>
-                <th>ROOM NUMBER</th>
+                <th>SURNAME</th>
+                <th>OTHER NAMES</th>
+                <th>SEX</th>
+                <th>HALL</th>
+                <th>ROOM</th>
                 <th>LEVEL</th>
                 <th>COURSE</th>
                 <th>CONTACT</th>
+                <th>EMAIL</th>
                 <th>ACTIONS</th>
             </tr>
         </thead>
         <tbody>
-            {% for row in student %}
+            {% for Student in Students %}
             <tr>
-                <td>{{student.surname}}</td>
-                <td>{{student.othernames}}</td>
-                <td>{{student.student_id}}</td>
-                <td>{{student.gender}}</td>
-                <td>{{student.room_number}}</td>
-                <td>{{student.level}}</td>
-                <td>{{student.course}}</td>
-                <td>{{student.contact}}</td>
+                <td>{{Student.student_id}}</td>
+                <td>{{Student.surname}}</td>
+                <td>{{Student.othernames}}</td>
+                <td>{{Student.gender}}</td>
+                <td>{{Student.hall}}</td>
+                <td>{{Student.room_number}}</td>
+                <td>{{Student.level}}</td>
+                <td>{{Student.course}}</td>
+                <td>{{Student.contact}}</td>
+                <td>{{Student.email}}</td>
                 <td class="action">
-                    <a href="#">Update</a>
-                    <a href="#">Delete</a>
+                    <a href="/update/{{Student.id}}">Update</a>
+                    <a href="/delete/{{Student.id}}">Delete</a>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
        </table>
+       {%endif%}
     </div>
 {% endblock %}

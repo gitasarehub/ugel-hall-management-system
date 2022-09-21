@@ -2,42 +2,38 @@
 
 {% block head %}
 <title>
-    Systemtickets
+    System Logs
 </title>
 {% endblock %}
 
 {% block body %} 
-    <h1>SYSTEM TICKETS</h1>
+    <h1 id="topic">SYSTEM LOGS</h1>
     <div class="tickets">
+        {% if Activity|length < 1 %}
+        <h3 style="text-align: center; color: #7d8da1;" >System Haven't Logged Any Activities Yet!</h3>
+        {% else %}
        <table>
         <thead>
             <tr>
-                <th>User</th>
-                <th>Action</th>
-                <th>Data</th>
+                <th>Doer</th>
+                <th>Event</th>
                 <th>Timestamp</th>
             </tr>
         </thead>
         <tbody>
+            {% for Activities in Activity %}
             <tr>
-                <td>hubert</td>
-                <td>Updated student details</td>
-                <td>Ama Narh</td>
-                <td>Today 9:00 am</td>
+                <td>{{Activities.doer}}</td>
+                <td>{{Activities.event}}</td>
+                <td>{{Activities.date_of_event.strftime('%d-%m-%Y %H:%M:%S')}}</td>
             </tr>
-            <tr>
-                <td>ofosu</td>
-                <td>Updated student details</td>
-                <td>Baah Yirenkyi</td>
-                <td>Yesterday 3:29 pm</td>
-            </tr>
-            <tr>
-                <td>asare</td>
-                <td>Added a new student</td>
-                <td>Edmund Mensah Adanor</td>
-                <td>Monday 5:04 pm</td>
-            </tr>
+            {% endfor %}
         </tbody>
        </table>
+       {% endif %}
     </div>
+    <script>
+        const icons = document.querySelector(".tickets-icon");
+        icons.classList.add("active")
+    </script>
 {% endblock %}

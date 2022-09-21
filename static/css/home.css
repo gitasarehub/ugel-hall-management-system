@@ -66,6 +66,9 @@ header ul li a{
 header ul li a:hover{
   color: #ffbb55;
 }
+header ul li a.active{
+  color: #ffbb55;
+}
 p span{
   font-weight: 600;
   color: wheat;

@@ -1,67 +1,84 @@
 function formValidation()
 {
-var uid = document.registration.userid;
-var uname = document.registration.username;
-var uname1 = document.registration.username1;
-var passid = document.registration.passid;
-var uadd = document.registration.address;
+var uid = document.registration.passcode;
+var uname = document.registration.surname;
+var uname1 = document.registration.othernames;
+var password = document.registration.password;
+var password2 = document.registration.password2;
 var uhall = document.registration.hall;
-var uphone = document.registration.phoneNumber;
+var uphone = document.registration.contact;
 var uemail = document.registration.email;
-var umsex = document.registration.msex;
-var ufsex = document.registration.fsex; 
-if(userid_validation(uid,8))
-{
-    if(allLetter(uname))
-{
-    if(allLetter(uname1))
+var gender = document.registration.gender;
+var staff_type = document.registration.staff_type;
+
+    if(userid_validation(uid))
     {
-        if(ValidateEmail(uemail))
-{
-if(passid_validation(passid,7,12))
-{
+    if(passwordcheck(password,password2))
+    {
+    if(allLetter(uname))
+    {
+    if(allLetters(uname1))
+    {
+    if(ValidateEmail(uemail))
+    {
+    if(passid_validation(password,7))
+    {
     if(allnumeric(uphone))
     {
-if(alphanumeric(uadd))
-{ 
-if(hallselect(hall))
-{
+    if(hallselect(uhall))
+    {
+    if(staff_typeselect(staff_type))
+    {
+    if(validsex(gender))
+    {
+    }
+    }
+    } 
+    } 
+    }
+    }
+    }
+    }
+    }
+    }
+    return false;
+}
 
-if(validsex(umsex,ufsex))
-{
-}
-} 
-}
-} 
-}
-}
-}
-}
-}
-return false;
-
-} function userid_validation(uid,mx,my)
+function userid_validation(uid)
 {
 var uid_len = uid.value.length;
-if (uid_len == 0 || uid_len >= my || uid_len < mx)
+if (uid_len <= 0)
 {
-alert("Enter a valid id ");
+alert("Enter a valid Passcode");
 uid.focus();
 return false;
 }
 return true;
 }
-function passid_validation(passid,mx,my)
-{
-var passid_len = passid.value.length;
-if (passid_len == 0 ||passid_len >= my || passid_len < mx)
-{
-alert("Password should not be empty / length be between "+mx+" to "+my);
-passid.focus();
-return false;
+
+function passwordcheck(my,mx){
+if(String(my)==String(mx)){
+    return true;
+}else{
+    alert("Passwords do not match!");
+    mx.focus();
+    return false;
 }
-return true;
 }
+
+function passid_validation(password,my)
+{
+var password_len = password.value.length;
+if (password_len == my ||password_len > my)
+{
+    return true;
+}
+    else{
+    alert("Password should not be empty or length must be greater than "+my);
+    passid.focus();
+}
+}
+
 function allLetter(uname)
 { 
 var letters = /^[A-Za-z]+$/;
@@ -75,22 +92,23 @@ alert('Name must have alphabet characters only');
 uname.focus();
 return false;
 }
-
 }
-function alphanumeric(uadd)
+
+function allLetters(uname1)
 { 
-var letters = /^[0-9a-zA-Z]+$/;
-if(uadd.value.match(letters))
+var letters = /^[A-Za-z ]+$/;
+if(uname1.value.match(letters))
 {
 return true;
 }
 else
 {
-alert('User address must have alphanumeric characters only');
-uadd.focus();
+alert('Other Names must have alphabet characters only');
+uname1.focus();
 return false;
 }
 }
+
 function hallselect(uhall)
 {
 if(uhall.value == "Default")
@@ -104,6 +122,21 @@ else
 return true;
 }
 }
+
+function staff_typeselect(staff_type)
+{
+if(staff_type.value == "Default")
+{
+alert('Select your hall from the list');
+staff_type.focus();
+return false;
+}
+else
+{
+return true;
+}
+}
+
 function allnumeric(uphone)
 { 
 var numbers = /^[0-9]+$/;
@@ -131,21 +164,18 @@ alert("You have entered an invalid email address!");
 uemail.focus();
 return false;
 }
-} function validsex(umsex,ufsex)
+} function validsex(gender)
 {
 x=0;
 
-if(umsex.checked) 
+if(gender.checked) 
 {
 x++;
-} if(ufsex.checked)
-{
-x++; 
 }
 if(x==0)
 {
 alert('Select Male/Female');
-umsex.focus();
+gender.focus();
 return false;
 }
 else
