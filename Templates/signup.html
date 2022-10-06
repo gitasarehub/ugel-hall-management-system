@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en"><head>
+<html lang="en">
+<head>
 <meta charset="utf-8">
 <title>Sign Up</title>
 
@@ -15,10 +16,6 @@
                 <td>
                   <h1 style="color:black">Sign Up</h1>
                 </td>
-              </tr>
-              <tr>
-                <td><label for="passcode">Staff Passcode:</label></td>
-                <td><input type="password" name="passcode" id="userid" placeholder="Staff Passcode"></td>
               </tr>
               <tr>
                 <td><label for="surname">Surname:</label></td>
@@ -49,6 +46,10 @@
                 <td><input type="tel" name="contact" id="contact" placeholder="staff contact"></td>
               </tr>
               <tr>
+                <td><label for="passcode">Staff Passcode:</label></td>
+                <td><input type="password" name="passcode" id="userid" placeholder="Staff Passcode"></td>
+              </tr>
+              <tr>
                 <td><label for="gender">Gender:</label></td>
                 <td>Male: <input type="radio" name="gender" value="Male">
                   Female: <input type="radio" name="gender" value="Female">
@@ -67,24 +68,28 @@
               </tr>
               <tr>
                 <td><label for="portfolio">Portfolio:</label></td>
-                <td> <select name="staff-type" id="portfolio" required>
+                <td>
+                <select name="staff-type" id="portfolio" required>
                   <option disabled selected>Select Portfolio</option>
                   <option value="Hall Tutor">Hall Tutor</option>
                   <option value="Chief Porter">Chief Porter</option>
                   <option value="Porter">Porter</option>
+                </select>
+              </td>
               </tr>
               <tr>
-                <td>
+                <td class="checkbox">
                   <input class="form-check-input me-2" type="checkbox" value="" id="form2Example3c" required/>
                             <label class="form-check-label" for="form2Example3">
-                              I agree all statements in Terms of service
+                              I agree all statements in Terms of Service
                             </label>
                 </td>
               </tr>
               <tr>
                 <td colspan="2"><input type="submit" class="submit" value="Register"/></td>
               </tr>
-              <tr> <td>Already have an account?
+              <tr> 
+              <td>Already have an account?
               </span>    
               <a href="/login">Login</a>
               </td>

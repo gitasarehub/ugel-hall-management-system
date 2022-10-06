@@ -32,6 +32,7 @@
             </tbody>
            </table>
            {% endif %}
+      {% if current_user.portfolio == "Hall Tutor" %}
    <div class="addevent-form">
       <h2 style="text-align:center; margin-top:1.5rem; color:#2e2e2e;">Add Event</h2>
          <form action="#" method="post">
@@ -63,6 +64,9 @@
             </div> 
       </form>
    </div>
+   {% else %}
+   <br>
+   {% endif %}
 </div>
 <script>
    const icons = document.querySelector(".dash-icon");

@@ -1,143 +1,76 @@
+* {
+    margin: 0
+  }
 
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
-}
-body{
-    margin: 0 15px;
-    padding: 30px;
-    min-height: 100vh;
-    display: block;
-    background: #e4b671;
-    text-align: center;
-}
-.container{
-    margin-top: 1rem;
-    margin-left: 22rem;
-    max-width: 900px;
-    padding: 30px;
-    width: 100%;
-    border-radius: 6px;
-    background-color: #fff;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-}
-.container header{
-    font-size: 20px;
-    font-weight: 600;
-    color: #333;
-}
-
-.container form{
-    margin-top: 16px;
-    min-height: 490px;
-    background-color: #fff;
-    overflow: hidden;
-}
-
-
-.container form .title{
-    display: block;
-    margin-bottom: 8px;
-    font-size: 16px;
-    font-weight: 500;
-    margin: 6px 0;
-    color: #333;
-}
-.container form .fields{
+  .container {
     display: flex;
-    gap: 1.2rem;
-    align-items: center;
-    justify-content:center;
-    flex-wrap: wrap;
-}
-form .fields .input-field{
-    display: flex;
-    width: calc(100% / 3 - 15px);
-    flex-direction: column;
-    margin: 4px 0;
-}
-.input-field label{
-    font-size: 12px;
-    font-weight: 600;
-    color: #2e2e2e;
-}
-.input-field input, select{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: #333;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-    padding: 0 15px;
-    height: 42px;
-    margin: 8px 0;
-}
-.input-field #contact-message{
-    outline: none;
-    font-size: 14px;
-    font-weight: 400;
-    color: #333;
-    border-radius: 5px;
-    border: 1px solid #aaa;
-    padding: 0 15px;
-    height: 80px;
-    margin: 8px 0;
-}
-.input-field input :focus,
-.input-field select:focus{
-    box-shadow: 0 3px 6px rgba(0,0,0,0.13);
-}
-
-.container form button{
-    align-items: center;
     justify-content: center;
-    height: 45px;
-    max-width: 200px;
-    width: 100%;
-    border: none;
-    outline: none;
-    border-radius: 5px;
-    margin: 25px 0;
-    background-color: #677483;
-    transition: all 0.3s linear;
-    cursor: pointer;
-}
-.container form .btnText{
-    font-size: 14px;
-    font-weight: 600;
-    color: #fff;
-}
-.container form button:hover,.btnText:hover{
-    background-color: #2e2e2e;
-}
-
-form .buttons{
-    display: flex;
     align-items: center;
-
-}
-
-@media (max-width: 750px) {
-    .container form{
-        overflow-y: scroll;
-    }
-    .container form::-webkit-scrollbar{
-       display: none;
-    }
-    form .fields .input-field{
-        width: calc(100% / 2 - 15px);
-    }
-}
-
-@media (max-width: 550px) {
-    form .fields .input-field{
-        width: 100%;
-    }
-}
-@media screen and (max-width: 1200px){
-    .container{
-        margin-left: 8rem;
-    }
-}
+    flex-direction: column;
+    height: 100vh;
+    background: url(/static/images/complaint_handling.webp) ;
+    background-size: cover;
+  }
+  
+  
+  .container h1 {
+    color: black;
+    font-family: sans-serif;
+    margin: 10px;
+  }
+  
+  .registartion-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 600px;
+    color: rgb(14, 13, 13);
+    font-size: 18px;
+    font-family: sans-serif;
+    background-color: #dce1eb;
+    padding: 20px;
+    border-radius: 10px;
+  }
+  
+  .registartion-form input,
+  .registartion-form select,
+  .registartion-form textarea {
+    border: none;
+    padding: 5px;
+    margin-top: 10px;
+    font-family: sans-serif;
+  }
+  .registartion-form textarea{
+    resize: none;
+    width: 180px;
+    height: 90px;
+  }
+  
+  .registartion-form input:focus,
+  .registartion-form textarea:focus {
+    box-shadow: 3px 3px 10px rgb(228, 228, 228), -3px -3px 10px rgb(224, 224, 224);
+  }
+  
+  .registartion-form .submit {
+    width: 100%;
+    padding: 8px 0;
+    font-size: 20px;
+    color:  white;
+    background-color: #ffbb55;
+    border-radius: 5px;
+    outline: none;
+      cursor: pointer;
+      font-weight: bold;
+    background: #ffbb55;
+      border-radius: 3px;
+      border: 1px solid #e4b671;
+      transition: .5s;
+  }
+  
+  .registartion-form .submit:hover {
+    box-shadow: 3px 3px 6px rgb(255, 214, 176);
+    background: #e3c89e;
+  }
+  label{
+    color: #363949;
+  }

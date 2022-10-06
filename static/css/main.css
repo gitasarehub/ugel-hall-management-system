@@ -618,8 +618,14 @@ main .porterslodge .lodge .ports #logkey{
 main .porterslodge .lodge .ports #logbook{
     margin-left: 5.1rem;
 }
+main .porterslodge .lodge .ports #stuLogbook{
+    margin-left: 7rem;
+}
 main .porterslodge .lodge .ports #complaint{
     margin-left: 7rem;
+}
+main .porterslodge .lodge .ports #StuComplaint{
+    margin-left: 5rem;
 }
 /* ===========================MEDIA QUERIES(for tablets and medium size phones)=========================== */
 @media screen and (max-width: 1200px){
@@ -653,16 +659,16 @@ main #topic{
     color: var(--color-dark);
 }
 main .group-tabs{
-    display: grid;
-    grid-template-rows: 0.8fr 0.8fr;
+    margin-top: 1.3rem;
+    grid-template-columns: 1fr 1fr;
     gap: 0.5rem;
 }
 main .tabs{
     margin-top: 1rem;
     margin-bottom: 1rem;
-    display: grid;
-    grid-template-columns:0.8fr 1.6fr;
-    gap: 1.1rem;
+    display: inline;
+    grid-template-rows:1fr;
+    gap: 0.3rem;
     color: var(--color-dark-variant);
 }
 main .a-tab{

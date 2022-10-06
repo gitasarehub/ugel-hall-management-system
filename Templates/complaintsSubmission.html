@@ -6,63 +6,53 @@
     <title>HALL COMPLAINTS FORM</title>
 </head>
 <body>
-    <h1>STUDENTS HALL COMPLAINTS FORM</h1>
     <div class="container">
-        <header>Fill Complaints Form</header>
-        <form action="#" method="post">
-            <div class="form first">
-                <div class="details personal">
-                    <div class="fields">
-                        <div class="input-field">
-                            <label>STUDENT ID</label>
-                            <input name="student_id" type="text" required>
-                        </div>
-                        <div class="input-field" >
-                            <label>STUDENT NAME</label>
-                            <input name="std_fullname" type="text" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>ROOM NUMBER</label>
-                            <input name="room_number" type="text" required>
-                        </div>
-
-                        <div class="input-field">
-                            <label>HALL OF RESIDENT</label>
-                            <select name="hall" required>
-                                <option disabled selected>Select HALL</option>
-                                <option>Dr. Hilla Liman Hall</option>
-                                <option>Alexander Kwapong Hall</option>
-                                <option>Elisabeth Frances Sey Hall</option>
-                                <option>Jean Nelson Hall</option>
-                            </select>
-                        </div>
-                        <div class="input-field">
-                            <label>ISSUE TYPE</label>
-                            <select name="issue_type" required>
+        <form action="#" name="registration" class="registartion-form" method="post">
+        <table>
+            <tr>
+                <td><h1>HALL COMPLAINTS FORM</h1></td>
+              </tr>
+                <tr>
+                    <td><label for="student_id">STUDENT ID</label></td>
+                    <td><input name="student_id" type="text" placeholder="Student ID" required></td>
+                </tr>
+                <tr>
+                    <td><label for="issue_type">ISSUE TYPE</label></td>
+                    <td><select name="issue_type" required>
                                 <option disabled selected>Select Type of Issue</option>
                                 <option value="Carpentry Issue">Carpentry Issue</option>
                                 <option value="Plumbing Issue">Plumbing Issue</option>
                                 <option value="Electrical Issue">Electrical Issue</option>
                                 <option value="Other">Other</option>
                             </select>
-                        </div>
-                        <div class="input-field">
-                            <label>IF OTHER SPECIFY</label>
-                            <input name="other_specify" type="text">
-                        </div>
-                        <div class="input-field">
-                            <label>DESCRIPTION OF ISSUE</label>
-                            <textarea name="description" id="contact-message" rows="4" placeholder="Give a brief description of the Issue"></textarea>
-                        </div>
-                </div>                        
-                        <button class="sumbit" type="submit">
-                            <span class="btnText">Submit</span>
-                            <i class="uil uil-navigator"></i>
-                        </button>
-                    </div>
-                </div> 
-            </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td><label for="other_specify" >IF OTHER SPECIFY</label></td>
+                    <td><input name="other_specify" type="text" placeholder="If other specify"></td>
+                </tr>
+                <tr>
+                    <td><label>ROOM NUMBER</label></td>
+                    <td><input name="room_number" type="text" placeholder="Room Number" required></td>
+                </tr>
+                <tr>
+                        <td><label for="hall">HALL OF RESIDENT</label></td>
+                        <td><select name="hall" required>
+                             <option disabled selected>Select Hall</option>
+                             <option>Dr. Hilla Liman Hall</option>
+                             <option>Alexander Kwapong Hall</option>
+                             <option>Elisabeth Frances Sey Hall</option>
+                             <option>Jean Nelson Hall</option>
+                            </select></td>
+                      </tr>
+                    <tr>
+                            <td><label for="description">DESCRIPTION OF ISSUE</label></td>
+                            <td><textarea name="description" id="contact-message" rows="4" placeholder="Give a brief description of the Issue"></textarea></td>        
+                        </tr>                 
+                <tr>
+                    <td colspan="2"><input type="submit" class="submit" value="Submit"/></td>
+                </tr>
+         </table>
         </form>
     </div>
 </body>

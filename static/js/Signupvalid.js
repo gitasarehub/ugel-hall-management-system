@@ -41,147 +41,149 @@ var staff_type = document.registration.staff_type;
     }
     }
     }
-    return false;
+    return true;
 }
 
-function userid_validation(uid)
-{
+function userid_validation(uid){
 var uid_len = uid.value.length;
-if (uid_len <= 0)
-{
-alert("Enter a valid Passcode");
-uid.focus();
-return false;
-}
-return true;
+if (uid_len = 0){
+    alert("Enter a valid Passcode!");
+    uid.focus();
+    return false;
+    }
+else
+    {
+    return true;
+    }
 }
 
 function passwordcheck(my,mx){
-if(String(my)==String(mx)){
-    return true;
-}else{
+if(String(my)==String(mx))
+    {
+        return true;
+    }
+else
+    {
     alert("Passwords do not match!");
     mx.focus();
     return false;
+    }
 }
-}
+
 
 function passid_validation(password,my)
 {
 var password_len = password.value.length;
-if (password_len == my ||password_len > my)
-{
-    return true;
-}
-    else{
-    alert("Password should not be empty or length must be greater than "+my);
+if (password_len >= my)
+    {
+        return true;
+    }
+else
+    {
+    alert("Your Password length should be more than "+my);
     passid.focus();
-}
+    return false;
+    }
 }
 
-function allLetter(uname)
-{ 
+function allLetter(uname){ 
 var letters = /^[A-Za-z]+$/;
 if(uname.value.match(letters))
-{
-return true;
-}
+    {
+    return true;
+    }
 else
-{
-alert('Name must have alphabet characters only');
-uname.focus();
-return false;
-}
+    {
+    alert('Name must have alphabet characters only');
+    uname.focus();
+    return false;
+    }
 }
 
-function allLetters(uname1)
-{ 
+function allLetters(uname1){ 
 var letters = /^[A-Za-z ]+$/;
 if(uname1.value.match(letters))
-{
-return true;
-}
+    {
+    return true;
+    }
 else
-{
-alert('Other Names must have alphabet characters only');
-uname1.focus();
-return false;
-}
+    {
+    alert('Other Names must have alphabet characters only');
+    uname1.focus();
+    return false;
+    }
 }
 
-function hallselect(uhall)
-{
+function hallselect(uhall){
 if(uhall.value == "Default")
-{
-alert('Select your hall from the list');
-uhall.focus();
-return false;
-}
+    {
+    alert('Select your hall from the list');
+    uhall.focus();
+    return false;
+    }
 else
-{
-return true;
-}
+    {
+    return true;
+    }
 }
 
-function staff_typeselect(staff_type)
-{
+function staff_typeselect(staff_type){
 if(staff_type.value == "Default")
-{
-alert('Select your hall from the list');
-staff_type.focus();
-return false;
-}
+    {
+    alert('Select your hall from the list');
+    staff_type.focus();
+    return false;
+    }
 else
-{
-return true;
-}
+    {
+    return true;
+    }
 }
 
-function allnumeric(uphone)
-{ 
+function allnumeric(uphone){ 
 var numbers = /^[0-9]+$/;
 if(uphone.value.match(numbers))
-{
-return true;
-}
+    {
+    return true;
+    }
 else
-{
-alert('Phone number must have numeric characters only');
-uphone.focus();
-return false;
+    {
+    alert('Phone number must have numeric characters only');
+    uphone.focus();
+    return false;
+    }
 }
-}
-function ValidateEmail(uemail)
-{
+
+function ValidateEmail(uemail){
 var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
 if(uemail.value.match(mailformat))
-{
-return true;
-}
+    {
+    return true;
+    }
 else
-{
-alert("You have entered an invalid email address!");
-uemail.focus();
-return false;
-}
-} function validsex(gender)
-{
-x=0;
+    {
+    alert("You have entered an invalid email address!");
+    uemail.focus();
+    return false;
+    }
+} 
 
+function validsex(gender){
+x=0;
 if(gender.checked) 
-{
-x++;
-}
-if(x==0)
-{
-alert('Select Male/Female');
-gender.focus();
-return false;
-}
+    {
+    x++;
+    }
+    if(x==0)
+        {
+        alert('Select Male/Female');
+        gender.focus();
+        return false;
+        }
 else
-{
-alert('Form Succesfully Submitted');
-window.location.reload()
-return true;
-}
+    {
+    alert('Form Succesfully Submitted');
+    // window.location.reload()
+    return true;
+    }
 }

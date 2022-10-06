@@ -94,8 +94,8 @@
                     <td>{{Visitors.room_number}}</td>
                     <td>{{Visitors.time_in.strftime('%d-%m-%Y %H:%M:%S')}}</td>
                     <td>{{Visitors.time_out}}</td>
-                    <td id="vistors" class="action">
-                        <a href="#">Sign Out</a>
+                    <td id="vistors" class="sign-out">
+                        <a href="/signoutVisitor/{{Visitors.id}}" class="warning">Sign Out</a>
                     </td>
                 </tr>
                 {% endfor %}

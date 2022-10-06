@@ -1,19 +1,13 @@
-from distutils.log import Log
-from email.policy import default
-from xmlrpc.client import DateTime
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc, or_, func
-from datetime import date, datetime
+from sqlalchemy import desc, or_
+from datetime import datetime
 from flask_login.utils import login_user
 from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
-import click
-from flask.cli import with_appcontext
-from wtforms.validators import DataRequired
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -21,24 +15,15 @@ app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///hallmanagement.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-# DATABASE_URL = os.environ['hallmanagement.db']
-# app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE')
-# connect = psycopg2.connect(DATABASE_URL, sslmode='require')
-
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-# @click.command(name='create_tables')
-# @with_appcontext
-# def create_tables():
-#     db.create_all()
-
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
-
+#===============================================================Database Tables============================================================
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, unique=True, nullable=False)
@@ -46,10 +31,10 @@ class Student(db.Model):
     othernames = db.Column(db.String(200), nullable=False)
     gender = db.Column(db.String(8), nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
-    contact = db.Column(db.String(20), nullable=False)
+    contact = db.Column(db.String(20), unique=True, nullable=False)
     course = db.Column(db.String(100), nullable=False)
     level = db.Column(db.String(3), nullable=False)
-    email = db.Column(db.String(200), nullable=False)
+    email = db.Column(db.String(200), unique=True, nullable=False)
     hall = db.Column(db.String(100), nullable=False)
 
     def __repr__(self):
@@ -62,7 +47,7 @@ class User(UserMixin, db.Model):
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(60), unique=True, nullable=False)
     password = db.Column(db.String(200), nullable=False)
-    contact = db.Column(db.String(18), nullable=False)
+    contact = db.Column(db.String(18), unique=True, nullable=False)
     portfolio = db.Column(db.String(30), nullable=False)
     hall = db.Column(db.String(30), nullable=False)
     gender = db.Column(db.String(6), nullable=False)
@@ -128,12 +113,12 @@ class Visitors(db.Model):
     def __repr__(self):
         return '<User %r>' % self.id
 
-# --------------Home Page----------------
+#==================================================================Home Page===============================================================
 @app.route('/', methods=['POST','GET'])
 def index():
     return render_template('home.html')
 
-# --------------Login Page---------------
+#==================================================================Login Page==============================================================
 @app.route('/login', methods=['POST','GET'])
 def login():
     if request.method == 'POST':
@@ -150,56 +135,60 @@ def login():
     else:
         return render_template("login.html")
 
-# ----------------------Signup Page-------------------
+#==================================================================Signup Page=============================================================
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     if request.method == "POST":     
-        if request.form['passcode'] != "staff@ugelhall2022":
+        Passcode = request.form['passcode']
+        if Passcode == "ugelstaff2022":
+                user_info = User(
+                    username = request.form['username'].title(),
+                    surname = request.form['surname'].title(),
+                    othernames = request.form['othernames'].title(),
+                    portfolio = request.form['staff-type'],
+                    gender = request.form['gender'].title(),
+                    email = request.form['email'].lower(),
+                    password = generate_password_hash(request.form['password']),
+                    contact = request.form['contact'],
+                    hall = request.form['hall'].title(),
+                )
+                try:
+                    db.session.add(user_info)
+                    db.session.commit()  
+                    # Add new data to db
+                    return redirect(url_for("login"))
+                except:
+                    # replace with nicer experience
+                    error_statement = "This Username or email already exists choose another one"
+                    return errorhandler(error_statement)
+        else:
             error_statement = "Passcode provided is invalid, visit your Admin for a Passcode"
             return errorhandler(error_statement)
-        else:
-            user_info = User(
-                username = request.form['username'].title(),
-                surname = request.form['surname'].title(),
-                othernames = request.form['othernames'].title(),
-                portfolio = request.form['staff-type'],
-                gender = request.form['gender'].title(),
-                email = request.form['email'].lower(),
-                password = generate_password_hash(request.form['password']),
-                contact = request.form['contact'],
-                hall = request.form['hall'].title()
-            )
-            try:
-                db.session.add(user_info)
-                db.session.commit()  
-                # Add new data to db
-                return redirect(url_for("login"))
-            except:
-                # replace with nicer experience
-                error_statement = "This Username or email already exists choose another one"
-                return errorhandler(error_statement)
+        
     else:
         return render_template('signup.html')
 
-# --------------------Errorhandling page--------------------
+#==============================================================Errorhandling Page===========================================================
 @app.route('/errorhandling', methods=['POST','GET'])
 def errorhandler(error_message):
     return render_template('errorhandling.html',error_message=error_message)
 
-# ------------------------Dashboad Page---------------------
+#==============================================================Dashboad Page===============================================================
 @app.route('/dashboard', methods=['POST','GET'])
 @login_required
 def dashboard():
     Male = Student.query.filter(Student.gender == "Male").count()
     Female = Student.query.filter(Student.gender == "Female").count()
     Activity = Activities.query.order_by(desc(Activities.date_of_event)).limit(4).all()
-    PostedEvents = Events.query.order_by(Events.event_date).limit(4).all()
+    PostedEvents = Events.query.order_by(desc(Events.event_date)).limit(4).all()
     return render_template('dashboard.html',Activity=Activity,Male=Male,Female=Female,PostedEvents=PostedEvents)
 
 # -------------------------------Search Page---------------------------
 @app.route('/search', methods=['POST','GET'])
 @login_required
 def search():
+    currentpage = request.url_rule
+    session['rule']= str(currentpage)
     if request.method == 'POST':
         searchQuery = request.form.get("searchQuery")
         try:
@@ -208,13 +197,14 @@ def search():
                                                 Student.othernames.op('regexp')(r'\b{}\b'.format(searchQuery.title())),
                                                 Student.room_number.op('regexp')(r'\b{}\b'.format(searchQuery.title()))
                                                     )).all()
-            return render_template('SearchStudent.html', results=results)
+            return render_template('searchpage.html', results=results)
         except:
-            return "There was a problem with the querying code"
+            error_message = "There was a problem with the querying code!"
+            return errorhandler(error_message)
     else:
             return render_template('searchpage.html')
 
-# -------------------------------Events Page-----------------------------------
+# -------------------------------Events Page------------------------------
 @app.route('/events', methods=['POST','GET'])
 @login_required
 def events():
@@ -234,7 +224,7 @@ def events():
         doer =session['user'],
         event ="Added a new event coming on " + eventpassed.event_date)
         try:
-            # db.session.add(eventpassed)
+            db.session.add(eventpassed)
             db.session.add(activity)
             db.session.commit()
             return redirect(url_for("events"))
@@ -242,10 +232,10 @@ def events():
             error_message = "Error occured adding Event!"
             return errorhandler(error_message)
     else:
-        PostedEvents = Events.query.order_by(Events.event_date).all()
+        PostedEvents = Events.query.order_by(desc(Events.event_date)).all()
         return render_template('events.html',PostedEvents=PostedEvents)
 
-# -----------------------------Addstudents Page-------------------------------
+#============================================================Addstudents Page=============================================================
 @app.route('/addstudent', methods=['POST', 'GET'])
 @login_required
 def addStudent():
@@ -261,23 +251,26 @@ def addStudent():
         course = request.form['course'].title()
         email = request.form['email'].lower()
 
+        checkRoom = Student.query.filter(Student.room_number == room_number).count()
+        if checkRoom <= 3:
+            data = Student(
+                surname=surname,
+                othernames=othernames,
+                student_id=student_id,
+                gender=gender,
+                hall=hall,
+                level=level,
+                room_number=room_number,
+                contact=contact,
+                course=course,
+                email= email)
 
-        data = Student(
-            surname=surname,
-            othernames=othernames,
-            student_id=student_id,
-            gender=gender,
-            hall=hall,
-            level=level,
-            room_number=room_number,
-            contact=contact,
-            course=course,
-            email= email
-        )
-        activity = Activities(
-        doer =session['user'],
-        event ="Added a new student with ID: " + str(data.student_id))
-
+            activity = Activities(
+            doer =session['user'],
+            event ="Added a new student with ID: " + str(data.student_id))
+        else:
+            error_message= "This Room is Full!"
+            return errorhandler(error_message),400
         try:
                 db.session.add(data)
                 db.session.add(activity)
@@ -285,24 +278,75 @@ def addStudent():
                 return redirect(url_for("database"))
         except:
                 error_message = "Add student was unsuccessful"
-                return errorhandler(error_message)
+                return errorhandler(error_message),400
     else:
         return render_template('addstudent.html')
 
-# ----------------------------Database Page------------------------------
+#=============================================================Database Page==============================================================
 @app.route('/database', methods=['POST','GET'])
 @login_required
 def database():
+    currentpage = request.url_rule
+    session['rule'] = str(currentpage)
     Students = Student.query.order_by(Student.surname).all()
     return render_template('database.html',Students=Students)
 
-# --------------------------Porterslodge Page----------------------------
+# -----------------------Update Students----------------------------
+@app.route('/update/<int:id>', methods=['POST','GET'])
+@login_required
+def update(id):
+    updateStudent = Student.query.get_or_404(id)
+    activity = Activities(
+        doer =session['user'],
+        event ="Updated details of student with ID: " + str(updateStudent.student_id))
+
+    if request.method == 'POST':
+# UpdateHere just can't update student ID
+        updateStudent.surname = request.form['surname'].title()
+        updateStudent.lastname = request.form['othernames'].title()
+        updateStudent.gender = request.form['gender'].title()
+        updateStudent.room_number = request.form['room_number'].capitalize()
+        updateStudent.contact = request.form['contact']
+        updateStudent.course = request.form['course'].title()
+        updateStudent.level = request.form['level']
+        updateStudent.hall = request.form['hall']
+        updateStudent.email = request.form['email'].lower()
+
+        try:
+            db.session.add(activity)
+            db.session.commit()
+            return redirect(url_for("database"))
+        except:
+                error_statement = "Make Sure All Required Details Are Not Empty!"
+                return errorhandler(error_statement),400
+    else:
+        return render_template('updateStudent.html', updateStudent=updateStudent)
+
+# ----------------------Delete Student---------------------------
+@app.route('/delete/<int:id>')
+@login_required
+def delete(id):
+    student_to_delete = Student.query.get_or_404(id)
+
+    activity = Activities(
+        doer = session['user'],
+        event = "Deleted student with ID: " + str(student_to_delete.student_id))
+    try:
+        db.session.add(activity)
+        db.session.delete(student_to_delete)
+        db.session.commit()
+        return redirect(url_for('database'))
+    except:
+        error_statement = "There Was a Problem Deleting This Student"
+        return errorhandler(error_statement)
+
+#===========================================================Porterslodge Page============================================================
 @app.route('/porterslodge', methods=['POST','GET'])
 @login_required
 def porterslodge():
     return render_template('porterslodge.html')
 
-# ---------LogKey under Porterslodge---------
+# -------------LogKey under Porterslodge--------------
 @app.route('/logkey', methods=['POST','GET'])
 @login_required
 def logkey():
@@ -328,7 +372,7 @@ def logkey():
     Logs = Keylog.query.order_by(Keylog.time_in).all()
     return render_template('logkey.html',Logs=Logs)
 
-#-------Vistorsbook under Porterslodge----------
+#----------Vistorsbook under Porterslodge---------------
 @app.route('/visitorsbook', methods=['POST','GET'])
 @login_required
 def visitorsbook():
@@ -363,7 +407,14 @@ def visitorsbook():
     Visits = Visitors.query.order_by(Visitors.time_in).all()
     return render_template('visitorsbook.html',Visits=Visits)
 
-# -------------------------SystemLogs Page-----------------------
+# ----------------------View Complaints---------------------------
+@app.route('/complaints', methods=['POST','GET'])
+@login_required
+def complaints():
+    Issues = Complaints.query.order_by(desc(Complaints.date_submitted)).all()
+    return render_template('complaints.html',Issues=Issues)
+
+#==============================================================SystemLogs Page==============================================================
 @app.route('/systemtickets', methods=['POST','GET'])
 @login_required
 def systemtickets():
@@ -371,12 +422,11 @@ def systemtickets():
     return render_template('systemtickets.html',Activity=Activity)
 
 
-# ------------------Compliants Submission Page-------------------
+#=====================================================Compliants Submission Page===========================================================
 @app.route('/complaintsSubmission', methods=['POST','GET'])
 def complaintsSubmission():
     if request.method == "POST":
         room_number = request.form['room_number'].capitalize()
-        fullname = request.form['std_fullname'].title()
         hall = request.form['hall']
         student_id = request.form['student_id']
         issue_type = request.form['issue_type']
@@ -387,10 +437,12 @@ def complaintsSubmission():
         if check_Id:    
             if issue_type == "Other":
                 issue_type = other_specify
-        
+        else:
+            error_message= "You're not a Resident of the Hall. You can't submit a complaint"
+            return errorhandler(error_message),400
         data = Complaints(
             room_number=room_number,
-            std_fullname=fullname,
+            std_fullname=check_Id.othernames + " " + check_Id.surname,
             student_id=student_id,
             hall=hall,
             issue_type=issue_type,
@@ -407,62 +459,6 @@ def complaintsSubmission():
     else:
         return render_template('complaintsSubmission.html')
 
-# --------------------View Complaints-----------------------
-@app.route('/complaints', methods=['POST','GET'])
-@login_required
-def complaints():
-    Issues = Complaints.query.order_by(desc(Complaints.date_submitted)).all()
-    return render_template('complaints.html',Issues=Issues)
-
-# ------------------Update Students--------------------------
-@app.route('/update/<int:id>', methods=['POST','GET'])
-@login_required
-def update(id):
-    updateStudent = Student.query.get_or_404(id)
-    activity = Activities(
-        doer =session['user'],
-        event ="Updated details of student with ID: " + str(updateStudent.student_id))
-
-    if request.method == 'POST':
-# UpdateHere just can't update student ID
-        updateStudent.surname = request.form['surname'].title()
-        updateStudent.lastname = request.form['othernames'].title()
-        updateStudent.gender = request.form['gender'].title()
-        updateStudent.room_number = request.form['room_number'].capitalize()
-        updateStudent.contact = request.form['contact']
-        updateStudent.course = request.form['course'].title()
-        updateStudent.level = request.form['level']
-        updateStudent.hall = request.form['hall']
-        updateStudent.email = request.form['email'].lower()
-
-        try:
-            db.session.add(activity)
-            db.session.commit()
-            return redirect(url_for("database"))
-        except:
-                error_statement = "Make Sure All Required Details Are Not Empty!"
-                return errorhandler(error_statement)
-    else:
-        return render_template('updateStudent.html', updateStudent=updateStudent)
-
-# ----------------------Delete Student---------------------------
-@app.route('/delete/<int:id>')
-@login_required
-def delete(id):
-    student_to_delete = Student.query.get_or_404(id)
-
-    activity = Activities(
-        doer = session['user'],
-        event = "Deleted student with ID: " + str(student_to_delete.student_id))
-    try:
-        db.session.add(activity)
-        db.session.delete(student_to_delete)
-        db.session.commit()
-        return redirect(url_for('database'))
-    except:
-        error_statement = "There Was a Problem Deleting This Student"
-        return errorhandler(error_statement)
-
 # ------------------Sign Out Keylog--------------------
 @app.route('/signoutLogger/<int:id>', methods=['POST','GET'])
 @login_required
@@ -471,8 +467,9 @@ def updateLoggers(id):
     activity = Activities(
         doer =session['user'],
         event ="Signed Out Key of Room: " + updateLog.room_number)
+    checkSigned = updateLog.collectors_name
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not checkSigned:
         updateLog.collectors_name = request.form['collectors_name'].title()
         updateLog.time_out = datetime.now()
         
@@ -495,8 +492,9 @@ def updateVisitors(id):
     activity = Activities(
         doer =session['user'],
         event ="Signed Out Visitor of Room: " + SignOutVisits.room_number)
+    checkSigned = SignOutVisits.time_out
 
-    if request.method == 'POST':
+    if request.method == 'POST' and not checkSigned:
         SignOutVisits.time_out = datetime.now()
 
         try:
@@ -516,6 +514,41 @@ def updateVisitors(id):
 def logout():
     logout_user()
     return redirect(url_for("index"))
+
+# ------------------------------Student Portal-------------------------------
+@app.route('/studentPortal', methods=['POST', 'GET'])
+def studentPortal():
+    return render_template('studentPortal.html')
+
+# ------------------------------Resume Form-------------------------------
+@app.route('/resumeForm', methods=['POST','GET'])
+def resumeForm():
+    # if request.method == "POST":     
+    #     Passcode = request.form['passcode']
+    #     if Passcode == "ugelstaff2022":
+    #             resume_info = resume_store(
+    #                 student_id = request.form['username'].title(),
+    #                 souvenirs = request.form['souvenirs'].title(),
+    #                 email = request.form['email'].lower(),
+    #                 password = generate_password_hash(request.form['password']),
+    #                 contact = request.form['contact'],
+    #                 hall = request.form['hall'].title(),
+    #             )
+    #             try:
+    #                 db.session.add(user_info)
+    #                 db.session.commit()  
+    #                 # Add new data to db
+    #                 return redirect(url_for("login"))
+    #             except:
+    #                 # replace with nicer experience
+    #                 error_statement = "This Username or email already exists choose another one"
+    #                 return errorhandler(error_statement)
+    #     else:
+    #         error_statement = "Passcode provided is invalid, visit your Admin for a Passcode"
+    #         return errorhandler(error_statement)
+        
+    # else:
+        return render_template('resumeForm.html')
 
 # ------------------------About_us Page--------------------------
 @app.route('/about_us', methods=['POST','GET'])

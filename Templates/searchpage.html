@@ -8,8 +8,8 @@
 <div class="searchpage">
 <div class="searchbody">
    <div class="searchbox">
-      <form onsubmit="return ValidateForm();">
-      <button class="btn-search">
+      <form action="" method="post" onsubmit="return ValidateForm();">
+      <button class="btn-search" type="submit">
          <img src="{{url_for('static', filename='images/search_btn.svg')}}">
          <i class="fas fa-search"></i>
       </button>
@@ -19,10 +19,10 @@
 </div>
 <!------------------------- Results Show Up Here -------------------->
 <div class="tickets">
-   {% if Results is not defined and Results|length == 0 %}
-   <h3 style="text-align: center; color: #7d8da1;" >Search for student by Surname or ID</h3>
-   {% elif Results|length < 1 %}
-   <h3 style="text-align: center; color: #7d8da1;" >There are no Students with this ID or Surname in the Ugel Halls</h3>
+   {% if results is not defined and results|length == 0 %}
+   <h3 style="text-align: center; color: #7d8da1;" >Search for student by Name(s), ID or Room Number</h3>
+   {% elif results|length < 1 %}
+   <h3 style="text-align: center; color: #7d8da1;" >There is no such student with the queried detail in the Ugel Halls</h3>
    {% else %}
   <table>
    <thead>
@@ -39,9 +39,9 @@
            <th>EMAIL</th>
            <th>ACTIONS</th>
        </tr>
-   </thead>
-   <tbody>
-       {% for Student in Students %}
+    </thead>
+    <tbody>
+       {% for Student in results %}
        <tr>
            <td>{{Student.surname}}</td>
            <td>{{Student.othernames}}</td>
@@ -59,7 +59,7 @@
            </td>
        </tr>
        {% endfor %}
-   </tbody>
+    </tbody>
   </table>
   {%endif%}
 </div>

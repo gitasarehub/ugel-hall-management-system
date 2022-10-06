@@ -37,7 +37,7 @@
   {% if Logs|length < 1 %}
         <h3 style="text-align: center; color: #7d8da1;" >Users Haven't Logged Any Keys Yet!</h3>
         {% else %}
-    <table>
+    <table id="myTable">
       <thead>
         <tr>
           <th>Room Number</th>
@@ -55,9 +55,9 @@
           <td>{{Keylog.loggers_name}}</td>
           <td>{{Keylog.time_in.strftime('%d-%m-%Y %H:%M:%S')}}</td>
           <td>{{Keylog.collectors_name}}</td>
-          <td id="TimeOut" >{{Keylog.time_out}}</td>
-          <td class="sign-out">
-            <a href="/signoutLogger/{{Keylog.id}}" class="warning">Sign Out</a>
+          <td id="TimeOut">{{Keylog.time_out}}</td>
+          <td id="signOut" class="sign-out">
+            <a id="signOutBtn" href="/signoutLogger/{{Keylog.id}}" class="warning">Sign Out</a>
           </td>
         </tr>
           {% endfor %}
@@ -68,9 +68,5 @@
   <script>
     const icons = document.querySelector(".lodge-icon");
     icons.classList.add("active")
-</script>
-<script>
-  const collector = document.getElementById("collector");
-  
 </script>
 {% endblock %}

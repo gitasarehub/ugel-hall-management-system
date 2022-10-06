@@ -18,8 +18,6 @@ section{
   background-image: url(/static/images/structures.jpg);
   background-position: center;
   background-size: cover;
-
-
 }
 header{
   position: absolute;
@@ -125,4 +123,15 @@ font-weight: 900;
 }
 .content .imgBox img{
   max-width: 340px;
+}
+@media screen and (max-width: 768px) {
+  .content .imgBox img{
+    max-width: 100px;
+  }
+}
+
+@media screen and (max-width: 1220px) {
+  .content .imgBox img{
+    max-width: 220px;
+  }
 }

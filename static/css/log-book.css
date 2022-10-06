@@ -55,7 +55,7 @@ form .fields .input-field{
     box-shadow: 0 3px 6px rgba(0,0,0,0.13);
 }
 
-.input-field textarea, select{
+.input-field textarea{
     outline: none;
     font-size: 14px;
     font-weight: 400;
@@ -65,6 +65,7 @@ form .fields .input-field{
     padding: 8px 15px;
     height: 100px;
     margin: 8px 0;
+    resize: none;
 }
 
 .container form button, .btnText{
