@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <title>Sign Up</title>
 
-<link rel='stylesheet' href="{{url_for('static',filename='css/resumeshop.css')}}">
+<link rel='stylesheet' href="{{url_for('static',filename='css/resume.css')}}">
 
 </head>
 <body>
@@ -13,9 +13,22 @@
             <table>
               <tr>
                 <td>
-                  <h1 style="color:black; margin-left:8rem;">CHECKIN ROOM</h1>
+                  <div class="logo"> <img src="{{url_for('static', filename='images/logo.png')}}">
+                    <h3 id="logo">UGEL <br> <span id="warning">HALL MANAGEMENT SYSTEM</span></h3>
+                  </div>
+                  <h1 style="color:black;">CHECK-IN TO ROOM</h1>
                 </td>
               </tr>
+              <td>
+                <label for="payment_mode">Payment Mode:</label>
+              </td>
+                <td>
+                  <select name="payment_mode" id="payment_mode" required>
+                    <option disabled selected>Choose Payment Mode</option>
+                    <option value="CAL BANK">CAL BANK</option>
+                    <option value="UG STS">UG STS</option>
+                  </select>
+                </td>
               <tr>
                 <td><label for="student_id">Student ID:</label></td>
                 <td><input type="text" name="student_id" id="student_id" placeholder="Student ID" required></td>
@@ -25,32 +38,9 @@
                 <td><input type="text" name="room_number" id="room_number" placeholder="Room Number"></td>
               </tr>
               <tr>
-                <td><label for="password">Password:</label></td>
-                <td><input type="password" name="password" id="password" placeholder="Password"></td>
+                <td><label for="transaction_nbr">Transaction No:</label></td>
+                <td><input type="text" name="transaction_nbr" id="transaction_nbr" placeholder="Transaction No"></td>
               </tr>
-              <!-- <tr>
-                <td><label for="souvenirs">Souvenirs:</label></td>
-                <td>
-                  <label for="T-Roll">T-Roll</label>
-                  <input type="checkbox" name="T-Roll" id="souvenirs" value="Pack of T-Roll">
-                </td>
-                <td>
-                  <label for="Books">Excersice Books</label>
-                  <input type="checkbox" name="Books" id="souvenirs" value="5 Excersice Books">
-                </td>
-                <td>
-                  <label for="Shirt">T-Shirt</label>
-                  <input type="checkbox" name="shirt" id="souvenirs" value="T-Shirt">
-                </td>
-                <td>
-                  <label for="drive">Drive</label>
-                  <input type="checkbox" name="drive" id="souvenirs" value="Pendrive">
-                </td>
-                <td>
-                  <label for="Pad">Sanitary Pad</label>
-                  <input type="checkbox" name="Pad" id="souvenirs" value="Pack of Sanitary Pad">
-                </td>
-              </tr> -->
               <tr>
                 <td colspan="2"><input type="submit" class="submit" value="Check In To Room"/></td>
               </tr> 

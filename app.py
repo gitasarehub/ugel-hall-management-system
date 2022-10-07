@@ -1,3 +1,4 @@
+from email import message
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, or_
@@ -168,6 +169,11 @@ def signup():
     else:
         return render_template('signup.html')
 
+#==============================================================SuccessHandling Page===========================================================
+@app.route('/successhandling', methods=['POST','GET'])
+def successhandler(success_message):
+    return render_template('successhandler.html',success_message=success_message)
+
 #==============================================================Errorhandling Page===========================================================
 @app.route('/errorhandling', methods=['POST','GET'])
 def errorhandler(error_message):
@@ -199,7 +205,7 @@ def search():
                                                     )).all()
             return render_template('searchpage.html', results=results)
         except:
-            error_message = "There was a problem with the querying code!"
+            error_message = "Problem Encountered Searching For Student!"
             return errorhandler(error_message)
     else:
             return render_template('searchpage.html')
@@ -346,7 +352,7 @@ def delete(id):
 def porterslodge():
     return render_template('porterslodge.html')
 
-# -------------LogKey under Porterslodge--------------
+#================LogKey under Porterslodge=================
 @app.route('/logkey', methods=['POST','GET'])
 @login_required
 def logkey():
@@ -372,7 +378,32 @@ def logkey():
     Logs = Keylog.query.order_by(Keylog.time_in).all()
     return render_template('logkey.html',Logs=Logs)
 
-#----------Vistorsbook under Porterslodge---------------
+# ------------------Sign Out Keylog--------------------
+@app.route('/signoutLogger/<int:id>', methods=['POST','GET'])
+@login_required
+def updateLoggers(id):
+    updateLog = Keylog.query.get_or_404(id)
+    activity = Activities(
+        doer =session['user'],
+        event ="Signed Out Key of Room: " + updateLog.room_number)
+    checkSigned = updateLog.collectors_name
+
+    if request.method == 'POST' and not checkSigned:
+        updateLog.collectors_name = request.form['collectors_name'].title()
+        updateLog.time_out = datetime.now()
+        
+        try:
+            db.session.add(activity)
+            db.session.commit()
+            return redirect(url_for('logkey'))
+        except:
+                error_statement = "Make Sure All Required Details Are Not Empty!"
+                return errorhandler(error_statement)
+    else:
+        Logs = Keylog.query.order_by(Keylog.time_in).all()
+        return render_template('signOutKeylog.html', Logs=Logs,updateLog=updateLog)
+
+#==============Vistorsbook under Porterslodge================
 @app.route('/visitorsbook', methods=['POST','GET'])
 @login_required
 def visitorsbook():
@@ -407,7 +438,31 @@ def visitorsbook():
     Visits = Visitors.query.order_by(Visitors.time_in).all()
     return render_template('visitorsbook.html',Visits=Visits)
 
-# ----------------------View Complaints---------------------------
+# ------------------Sign Out Visitors--------------------
+@app.route('/signoutVisitor/<int:id>', methods=['POST','GET'])
+@login_required
+def updateVisitors(id):
+    SignOutVisits = Visitors.query.get_or_404(id)
+    activity = Activities(
+        doer =session['user'],
+        event ="Signed Out Visitor of Room: " + SignOutVisits.room_number)
+    checkSigned = SignOutVisits.time_out
+
+    if request.method == 'POST' and not checkSigned:
+        SignOutVisits.time_out = datetime.now()
+
+        try:
+            db.session.add(activity)
+            db.session.commit()
+            return redirect(url_for('visitorsbook'))
+        except:
+                error_statement = "System Encountered Error Signing Visitor Out!"
+                return errorhandler(error_statement)
+    else:
+        Visits = Visitors.query.order_by(Visitors.time_in).all()
+        return render_template('signOutVisitor.html',Visits=Visits,SignOutVisits=SignOutVisits)
+
+#===========================View Complaints====================
 @app.route('/complaints', methods=['POST','GET'])
 @login_required
 def complaints():
@@ -451,76 +506,27 @@ def complaintsSubmission():
         try:
                 db.session.add(data)
                 db.session.commit()
-                error_statement = "Complaint Submitted Successfully!"
-                return errorhandler(error_statement)
+                statement = "Complaint Submitted Successfully!"
+                return successhandler(statement),200
         except:
                 error_statement = "Complaint Submitted was Unsuccessful!"
                 return errorhandler(error_statement)
     else:
         return render_template('complaintsSubmission.html')
 
-# ------------------Sign Out Keylog--------------------
-@app.route('/signoutLogger/<int:id>', methods=['POST','GET'])
-@login_required
-def updateLoggers(id):
-    updateLog = Keylog.query.get_or_404(id)
-    activity = Activities(
-        doer =session['user'],
-        event ="Signed Out Key of Room: " + updateLog.room_number)
-    checkSigned = updateLog.collectors_name
-
-    if request.method == 'POST' and not checkSigned:
-        updateLog.collectors_name = request.form['collectors_name'].title()
-        updateLog.time_out = datetime.now()
-        
-        try:
-            db.session.add(activity)
-            db.session.commit()
-            return redirect(url_for('logkey'))
-        except:
-                error_statement = "Make Sure All Required Details Are Not Empty!"
-                return errorhandler(error_statement)
-    else:
-        Logs = Keylog.query.order_by(Keylog.time_in).all()
-        return render_template('signOutKeylog.html', Logs=Logs,updateLog=updateLog)
-
-# ------------------Sign Out Visitors--------------------
-@app.route('/signoutVisitor/<int:id>', methods=['POST','GET'])
-@login_required
-def updateVisitors(id):
-    SignOutVisits = Visitors.query.get_or_404(id)
-    activity = Activities(
-        doer =session['user'],
-        event ="Signed Out Visitor of Room: " + SignOutVisits.room_number)
-    checkSigned = SignOutVisits.time_out
-
-    if request.method == 'POST' and not checkSigned:
-        SignOutVisits.time_out = datetime.now()
-
-        try:
-            db.session.add(activity)
-            db.session.commit()
-            return redirect(url_for('visitorsbook'))
-        except:
-                error_statement = "System Encountered Error Signing Visitor Out!"
-                return errorhandler(error_statement)
-    else:
-        Visits = Visitors.query.order_by(Visitors.time_in).all()
-        return render_template('signOutVisitor.html',Visits=Visits,SignOutVisits=SignOutVisits)
-
-# ------------------------------Log Out-------------------------------
+#===========================================================Log Out===========================================================
 @app.route('/logout', methods=['POST', 'GET'])
 @login_required
 def logout():
     logout_user()
     return redirect(url_for("index"))
 
-# ------------------------------Student Portal-------------------------------
+#==============================================================Student Portal=============================================================
 @app.route('/studentPortal', methods=['POST', 'GET'])
 def studentPortal():
     return render_template('studentPortal.html')
 
-# ------------------------------Resume Form-------------------------------
+#===============================================================Resume Form===============================================================
 @app.route('/resumeForm', methods=['POST','GET'])
 def resumeForm():
     # if request.method == "POST":     
@@ -550,16 +556,16 @@ def resumeForm():
     # else:
         return render_template('resumeForm.html')
 
-# ------------------------About_us Page--------------------------
+#=============================================================About_us Page============================================================
 @app.route('/about_us', methods=['POST','GET'])
 def about_us():
     return render_template('about_us.html')
 
-# ----------------------Contact_us Page--------------------
+#=============================================================Contact_us Page===========================================================
 @app.route('/contact_us', methods=['POST','GET'])
 def contact_us():
     return render_template('contact_us.html')
 
-
+#=======================================================================================================================================
 if __name__ == "__main__":
     app.run(debug=True)

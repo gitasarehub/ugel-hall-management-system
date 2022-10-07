@@ -1,3 +1,44 @@
+const form = document.getElementById('registration');
+const uid = document.getElementById('userid');
+const surname = document.getElementById('surname');
+const othernames = document.getElementById('othernames');
+const username = document.getElementById('username');
+const password = document.getElementById('password');
+const password2 = document.getElementById('password2');
+const uphone = document.getElementById('contact');
+const uemail = document.getElementById('email');
+const staff_type = document.getElementById('staff_type');
+
+
+form.addEventListener('submit', (e) =>{
+    e.preventDefault();
+
+    checkInputs();
+});
+
+function checkInputs(){
+    //get the values from the inputs
+    const usernameValue = username.value.trim()
+    const uemailValue = uemail.value.trim()
+    const surnameValue = surname.value.trim()
+    const othernamesValue = othernames.value.trim()
+    const passwordValue = password.value.trim()
+    const password2Value = password2.value.trim()
+    const uphoneValue = uphone.value.trim()
+    const staff_typeValue = staff_type.value.trim()
+    const uidValue = uid.value.trim()
+
+    if(usernameValue===''){
+        //show error
+
+    }else{
+        //do something
+    }
+    
+}
+
+
+
 function formValidation()
 {
 var uid = document.registration.passcode;

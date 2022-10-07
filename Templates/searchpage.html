@@ -37,8 +37,11 @@
            <th>COURSE</th>
            <th>CONTACT</th>
            <th>EMAIL</th>
-           <th>ACTIONS</th>
+           {% if current_user.portfolio == "Hall Tutor" %}
+            <th>ACTIONS</th>
+           {% else %}
        </tr>
+           {% endif %}
     </thead>
     <tbody>
        {% for Student in results %}
@@ -53,10 +56,13 @@
            <td>{{Student.course}}</td>
            <td>{{Student.contact}}</td>
            <td>{{Student.email}}</td>
+           {% if current_user.portfolio == "Hall Tutor" %}
            <td class="action">
                <a href="/update/{{Student.id}}">Update</a>
                <a href="/delete/{{Student.id}}">Delete</a>
+           {% else %}
            </td>
+           {% endif %}
        </tr>
        {% endfor %}
     </tbody>

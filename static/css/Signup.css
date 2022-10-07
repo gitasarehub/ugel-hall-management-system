@@ -1,25 +1,39 @@
 * {
     margin: 0
   }
-
   .container {
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
     height: 100vh;
-    background: url(/static/images/B3.jpeg) ;
+    background: url(/static/images/B3.jpeg);
     background-size: cover;
   }
-  
-  
-  .container h1 {
+.logo{
+    display:flex;
+    gap: 0rem;
+  }
+  .logo h3{
+    margin-top:0.9rem;
+  }
+.logo img{
+    width: 5rem;
+    height: 5rem;
+  }
+#logo{
+  color: rgb(32, 60, 107);
+}
+#warning{
+  color: rgb(210, 174, 107)
+}
+.container h1 {
     color: black;
     font-family: sans-serif;
     margin: 10px;
   }
   
-  .registartion-form {
+.registartion-form {
     display: flex;
     justify-content: center;
     align-items: center;

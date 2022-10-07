@@ -3,13 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Login Form</title>
+  <title>Login Staff</title>
   <link rel="stylesheet" href="{{url_for('static', filename='css/Login.css')}}">
 </head>
 <body>
   <div class="wrapper">
+    <div class="logo"> <img src="{{url_for('static', filename='images/logo.png')}}">
+      <h3 id="logo">UGEL <br> <span id="warning">HALL MANAGEMENT SYSTEM</span></h3>
+    </div>
     <h1 class="label">User Login</h1>
-    <div class="display-message">
+    <!-- <div class="display-message">
       {% with messages = get_flashed_messages() %}
           {% if messages %}
           <ul>
@@ -20,9 +23,8 @@
         {% endif %}
         {% endwith %}
     </div>
-    <br>
-
-    <form method="post" name="login" action="#">
+    <br> -->
+  <form method="post" name="login" action="#">
       <div class="field username">
         <div class="input-area">
           <input type="text" name="username" placeholder="username">

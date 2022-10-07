@@ -1,19 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <title>Sign Up</title>
 
 <link rel='stylesheet' href="{{url_for('static',filename='css/Signup.css')}}">
 
 </head>
 <body>
-
     <div class="container">
         <form name="registration" class="registartion-form" method="post" onsubmit="return formValidation()" action="#">
             <table>
               <tr>
                 <td>
+                  <div class="logo"> <img src="{{url_for('static', filename='images/logo.png')}}">
+                    <h3 id="logo">UGEL <br> <span id="warning">HALL MANAGEMENT SYSTEM</span></h3>
+                  </div>
                   <h1 style="color:black">Sign Up</h1>
                 </td>
               </tr>
@@ -38,7 +41,7 @@
                 <td><input type="password" name="password" id="password" placeholder="Password"></td>
               </tr>
               <tr>
-                <td><label for="password">Confirm Password:</label></td>
+                <td><label for="password2">Confirm Password:</label></td>
                 <td><input type="password" name="password2" id="password2" placeholder="Password"></td>
               </tr>
               <tr>
@@ -51,8 +54,11 @@
               </tr>
               <tr>
                 <td><label for="gender">Gender:</label></td>
-                <td>Male: <input type="radio" name="gender" value="Male">
-                  Female: <input type="radio" name="gender" value="Female">
+                <select name="gender" id="gender" required>
+                  <option disabled selected>Select Gender</option>
+                  <option value="Male">Male</option>
+                  <option value="Female">Female</option>
+                </select>
               </tr>
               <tr>
                 <td><label for="hall">Hall:</label></td>

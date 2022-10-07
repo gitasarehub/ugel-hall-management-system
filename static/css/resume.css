@@ -11,12 +11,29 @@
    background: url(/static/images/resume.png) ;
    background-size: cover;
  }
- 
+ .logo{
+  display:flex;
+  gap: 0rem;
+}
+.logo h3{
+  margin-top:0.9rem;
+}
+.logo img{
+  width: 5rem;
+  height: 5rem;
+}
+#logo{
+color: rgb(32, 60, 107);
+}
+#warning{
+color: rgb(210, 174, 107)
+}
  
  .container h1 {
    color: white;
    font-family: sans-serif;
-   margin: 20px;
+   margin-top: 2px;
+   margin-bottom: 2px;
  }
  
  .registartion-form {

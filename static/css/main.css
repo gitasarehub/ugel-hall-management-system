@@ -110,7 +110,7 @@ b{
     color: var(--color-warining);
 }
 aside #logo{
-    color: rgb(32, 60, 107)
+    color: rgb(32, 60, 107);
 }
 aside #warning{
     color: rgb(210, 174, 107)
@@ -491,6 +491,9 @@ main .container form{
     min-height: 490px;
     overflow: hidden;
 }
+main #bucket form{
+    min-height: 200px;
+}
 main .container form .title{
     display: block;
     margin-bottom: 8px;
@@ -619,7 +622,7 @@ main .porterslodge .lodge .ports #logbook{
     margin-left: 5.1rem;
 }
 main .porterslodge .lodge .ports #stuLogbook{
-    margin-left: 7rem;
+    margin-left: 3.5rem;
 }
 main .porterslodge .lodge .ports #complaint{
     margin-left: 7rem;
