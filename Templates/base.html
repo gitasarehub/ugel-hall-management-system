@@ -27,6 +27,7 @@
                 </div>
             </div>
             <div class="sidebar">
+                {% if current_user.portfolio == "Hall Tutor" %}
                 <a href="/dashboard" class="icon dash-icon">
                     <span> <img class="btn" src="{{url_for('static', filename='images/dashboard.svg')}}"></span>
                     <h4>Dashboard</h4>
@@ -51,6 +52,28 @@
                     <span> <img id="logout" class="btn" src="{{url_for('static', filename='images/logout.svg')}}"></span>
                     <h4>Logout</h4>
                 </a>
+                 {% else %}
+                 <a href="/dashboard" class="icon dash-icon">
+                    <span> <img class="btn" src="{{url_for('static', filename='images/dashboard.svg')}}"></span>
+                    <h4>Dashboard</h4>
+                </a>
+                <a href="/database" class="icon data-icon">
+                    <span> <img class="btn" src="{{url_for('static', filename='images/database.svg')}}"></span>
+                    <h4>Database</h4>
+                </a>
+                <a href="/porterslodge" class="icon lodge-icon">
+                    <span> <img class="btn" src="{{url_for('static', filename='images/holiday_village.svg')}}"></span>
+                    <h4>Porters Lodge</h4>
+                </a>
+                <a href="/systemtickets" class="icon tickets-icon">
+                    <span> <img class="btn" src="{{url_for('static', filename='images/settings.svg')}}"></span>
+                    <h4>System Logs</h4>
+                </a>
+                <a href="/logout">
+                    <span> <img id="logout" class="btn" src="{{url_for('static', filename='images/logout.svg')}}"></span>
+                    <h4>Logout</h4>
+                </a>
+                 {% endif %}
             </div>
         </aside>
         <!--------------------- End of Aside --------------------->

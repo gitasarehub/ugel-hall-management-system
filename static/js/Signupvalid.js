@@ -18,7 +18,7 @@ form.addEventListener('submit', (e) =>{
 
 function checkInputs(){
     //get the values from the inputs
-    const usernameValue = username.value.trim()
+    // const usernameValue = username.value.trim()
     const uemailValue = uemail.value.trim()
     const surnameValue = surname.value.trim()
     const othernamesValue = othernames.value.trim()
@@ -28,62 +28,89 @@ function checkInputs(){
     const staff_typeValue = staff_type.value.trim()
     const uidValue = uid.value.trim()
 
-    if(usernameValue===''){
-        //show error
+    if(userid_validation(uidValue))
+    {
+        if(passwordcheck(passwordValue,password2Value))
+        {
+            if(allLetter(surnameValue))
+                {
+                if(allLetters(othernamesValue))
+                    {
+                    if(ValidateEmail(uemailValue))
+                        {
+                        if(passid_validation(passwordValue,7))
+                            {
+                            if(allnumeric(uphoneValue))
+                                {
+                                // if(hallselect(uhall))
+                                    // {
+                                    if(staff_typeselect(staff_typeValue))
+                                        {
+                                        // if(validsex(gender))
+                                        //     {
+                                        //         }
+                                            }
+                                        // } 
+                                    } 
+                                }
+                            }
+                        }
+                    }
+                }
+            }else
+            {
+                return false;
+            }
 
-    }else{
-        //do something
-    }
+}
+
+
+// function formValidation()
+// {
+// var uid = document.registration.passcode;
+// var uname = document.registration.surname;
+// var uname1 = document.registration.othernames;
+// var password = document.registration.password;
+// var password2 = document.registration.password2;
+// var uhall = document.registration.hall;
+// var uphone = document.registration.contact;
+// var uemail = document.registration.email;
+// var gender = document.registration.gender;
+// var staff_type = document.registration.staff_type;
+
+    // if(userid_validation(uid))
+    // {
+    //     if(passwordcheck(password,password2))
+    //     {
+    //     if(allLetter(uname))
+    //     {
+    //     if(allLetters(uname1))
+    //     {
+    //     if(ValidateEmail(uemail))
+    //     {
+    //     if(passid_validation(password,7))
+    //     {
+    //     if(allnumeric(uphone))
+    //     {
+    //     if(hallselect(uhall))
+    //     {
+    //     if(staff_typeselect(staff_type))
+    //     {
+    //     if(validsex(gender))
+    //     {
+    //     }
+    //     }
+    //     } 
+    //     } 
+    //     }
+    //     }
+    //     }
+    //     }
+    //     }
+    //     return false;
+    // }
     
-}
-
-
-
-function formValidation()
-{
-var uid = document.registration.passcode;
-var uname = document.registration.surname;
-var uname1 = document.registration.othernames;
-var password = document.registration.password;
-var password2 = document.registration.password2;
-var uhall = document.registration.hall;
-var uphone = document.registration.contact;
-var uemail = document.registration.email;
-var gender = document.registration.gender;
-var staff_type = document.registration.staff_type;
-
-    if(userid_validation(uid))
-    {
-    if(passwordcheck(password,password2))
-    {
-    if(allLetter(uname))
-    {
-    if(allLetters(uname1))
-    {
-    if(ValidateEmail(uemail))
-    {
-    if(passid_validation(password,7))
-    {
-    if(allnumeric(uphone))
-    {
-    if(hallselect(uhall))
-    {
-    if(staff_typeselect(staff_type))
-    {
-    if(validsex(gender))
-    {
-    }
-    }
-    } 
-    } 
-    }
-    }
-    }
-    }
-    }
-    }
-    return true;
-}
+// }
 
 function userid_validation(uid){
 var uid_len = uid.value.length;
@@ -99,15 +126,15 @@ else
 }
 
 function passwordcheck(my,mx){
-if(String(my)==String(mx))
+if(my==mx)
     {
         return true;
     }
 else
     {
-    alert("Passwords do not match!");
-    mx.focus();
-    return false;
+        alert("Passwords do not match!");
+        mx.focus();
+        return false;
     }
 }
 
@@ -123,7 +150,6 @@ else
     {
     alert("Your Password length should be more than "+my);
     passid.focus();
-    return false;
     }
 }
 
@@ -137,7 +163,6 @@ else
     {
     alert('Name must have alphabet characters only');
     uname.focus();
-    return false;
     }
 }
 
@@ -151,16 +176,14 @@ else
     {
     alert('Other Names must have alphabet characters only');
     uname1.focus();
-    return false;
     }
 }
 
 function hallselect(uhall){
-if(uhall.value == "Default")
+if(uhall.value == "")
     {
     alert('Select your hall from the list');
     uhall.focus();
-    return false;
     }
 else
     {
@@ -169,17 +192,28 @@ else
 }
 
 function staff_typeselect(staff_type){
-if(staff_type.value == "Default")
+if(staff_type.value == "")
     {
     alert('Select your hall from the list');
     staff_type.focus();
-    return false;
     }
 else
     {
     return true;
     }
 }
+
+function gender(sex){
+    if(gender.value == "")
+        {
+        alert('Select your gender');
+        gender.focus();
+        }
+    else
+        {
+        return true;
+        }
+    }
 
 function allnumeric(uphone){ 
 var numbers = /^[0-9]+$/;
@@ -191,7 +225,6 @@ else
     {
     alert('Phone number must have numeric characters only');
     uphone.focus();
-    return false;
     }
 }
 
@@ -205,26 +238,5 @@ else
     {
     alert("You have entered an invalid email address!");
     uemail.focus();
-    return false;
-    }
-} 
-
-function validsex(gender){
-x=0;
-if(gender.checked) 
-    {
-    x++;
-    }
-    if(x==0)
-        {
-        alert('Select Male/Female');
-        gender.focus();
-        return false;
-        }
-else
-    {
-    alert('Form Succesfully Submitted');
-    // window.location.reload()
-    return true;
     }
 }

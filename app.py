@@ -1,4 +1,3 @@
-from email import message
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, or_
@@ -136,32 +135,72 @@ def login():
     else:
         return render_template("login.html")
 
+#==============================================================Reset Password==============================================================
+@app.route('/resetpassword', methods=['POST','GET'])
+def resetpassword():
+    if request.method == 'POST':
+        email=request.form.get('email').lower()
+        checkEmail=User.query.filter(User.email==email).first()
+        if checkEmail:
+            send_mail()
+            # message = flash('OTP sent please check your mail!')
+        else:
+            errorhandler('This email is not recognized!')
+    return render_template('resetpassword.html')
+
+def send_mail():
+    pass
+
 #==================================================================Signup Page=============================================================
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     if request.method == "POST":     
         Passcode = request.form['passcode']
         if Passcode == "ugelstaff2022":
-                user_info = User(
-                    username = request.form['username'].title(),
-                    surname = request.form['surname'].title(),
-                    othernames = request.form['othernames'].title(),
-                    portfolio = request.form['staff-type'],
-                    gender = request.form['gender'].title(),
-                    email = request.form['email'].lower(),
-                    password = generate_password_hash(request.form['password']),
-                    contact = request.form['contact'],
-                    hall = request.form['hall'].title(),
-                )
-                try:
-                    db.session.add(user_info)
-                    db.session.commit()  
-                    # Add new data to db
-                    return redirect(url_for("login"))
-                except:
-                    # replace with nicer experience
-                    error_statement = "This Username or email already exists choose another one"
-                    return errorhandler(error_statement)
+                    username = request.form['username'].title()
+                    surname = request.form['surname'].title()
+                    othernames = request.form['othernames'].title()
+                    portfolio = request.form['staff-type']
+                    gender = request.form['gender'].title()
+                    email = request.form['email'].lower()
+                    password = generate_password_hash(request.form['password'])
+                    contact = request.form['contact']
+                    hall = request.form['hall'].title()
+                    
+                    TutorsCount= User.query.filter(User.hall==hall and User.portfolio=="Hall Tutor").count()
+                    if (portfolio == "Hall Tutor" and TutorsCount<1):
+                        user_info = User(
+                            username = username,
+                            surname = surname,
+                            othernames = othernames,
+                            portfolio = portfolio,
+                            gender = gender,
+                            email = email,
+                            password = password,
+                            contact = contact,
+                            hall = hall,
+                        )
+                    elif (portfolio != "Hall Tutor"):
+                        user_info = User(
+                            username = username,
+                            surname = surname,
+                            othernames = othernames,
+                            portfolio = portfolio,
+                            gender = gender,
+                            email = email,
+                            password = password,
+                            contact = contact,
+                            hall = hall,
+                        )
+                    try:
+                        db.session.add(user_info)
+                        db.session.commit()  
+                        # Add new data to db
+                        return redirect(url_for("login"))
+                    except:
+                        # replace with nicer experience
+                        error_statement = "Error: Username already exists or You can't be the Hall Tutor!"
+                        return errorhandler(error_statement)
         else:
             error_statement = "Passcode provided is invalid, visit your Admin for a Passcode"
             return errorhandler(error_statement)
@@ -344,7 +383,7 @@ def delete(id):
         return redirect(url_for('database'))
     except:
         error_statement = "There Was a Problem Deleting This Student"
-        return errorhandler(error_statement)
+        return errorhandler(error_statement),400
 
 #===========================================================Porterslodge Page============================================================
 @app.route('/porterslodge', methods=['POST','GET'])
@@ -358,12 +397,21 @@ def porterslodge():
 def logkey():
     if request.method=="POST":
         room_number=request.form['room_number'].capitalize()
-        loggers_name=request.form['loggers_name'].title()
+        studentid=request.form['studentid']
+        checkStudent = Student.query.filter(Student.student_id==studentid).first()
         
-        alog = Keylog(
-            room_number=room_number,
-            loggers_name=loggers_name
-        )
+        if (checkStudent and checkStudent.room_number==room_number):
+
+            surname = checkStudent.surname
+            othernames = checkStudent.othernames
+            loggers_name= surname + " " + othernames
+
+            alog = Keylog(
+                room_number=room_number,
+                loggers_name=loggers_name)
+        else:
+            error_message= "You must be a room member to log its key!"
+            return errorhandler(error_message),400
         activity = Activities(
         doer =session['user'],
         event ="Logged key of Room: " + room_number)
@@ -388,17 +436,23 @@ def updateLoggers(id):
         event ="Signed Out Key of Room: " + updateLog.room_number)
     checkSigned = updateLog.collectors_name
 
-    if request.method == 'POST' and not checkSigned:
-        updateLog.collectors_name = request.form['collectors_name'].title()
-        updateLog.time_out = datetime.now()
+    if request.method == 'POST':
+        collectorsid = request.form['collectors_id']
+        checkCollector = Student.query.filter(Student.student_id==collectorsid).first()
+        if (checkCollector and updateLog.room_number==checkCollector.room_number and not checkSigned):
+                updateLog.collectors_name = checkCollector.surname + " " + checkCollector.othernames
+                updateLog.time_out = datetime.now()
         
-        try:
-            db.session.add(activity)
-            db.session.commit()
-            return redirect(url_for('logkey'))
-        except:
-                error_statement = "Make Sure All Required Details Are Not Empty!"
-                return errorhandler(error_statement)
+                try:
+                    db.session.add(activity)
+                    db.session.commit()
+                    return redirect(url_for('logkey'))
+                except:
+                        error_statement = "Make Sure All Required Details Are Not Empty!"
+                        return errorhandler(error_statement)
+        else:
+            error_statement = "Error: You must be a room member OR key already signed out!"
+            return errorhandler(error_statement),400
     else:
         Logs = Keylog.query.order_by(Keylog.time_in).all()
         return render_template('signOutKeylog.html', Logs=Logs,updateLog=updateLog)
@@ -411,29 +465,32 @@ def visitorsbook():
         visitors_name=request.form['visitors_name'].title()
         id_type=request.form['id_type'].title()
         id_number=request.form['id_number']
-        hostname=request.form['hostname'].title()
-        hall=request.form['hall']
+        hostid=request.form['hostid'].title()
         room_number=request.form['room_number'].capitalize()
         visitors_contact=request.form['visitors_contact']
-        
-        Visits = Visitors(
-            visitors_name=visitors_name,
-            id_type=id_type,
-            id_number=id_number,
-            hostname=hostname,
-            hall=hall,
-            room_number=room_number,
-            contact=visitors_contact
-        )
-        activity = Activities(
-        doer =session['user'],
-        event ="Logged a visitor of Room: " + room_number)
-        try:
-            db.session.add(Visits)
-            db.session.add(activity)
-            db.session.commit()
-        except:
-            error_message = "Problem Encountered While Logging Visitor!"
+        checkHost=Student.query.filter(Student.student_id==hostid).first()
+        if (checkHost and checkHost.room_number == room_number):
+            Visits = Visitors(
+                visitors_name=visitors_name,
+                id_type=id_type,
+                id_number=id_number,
+                hostname=checkHost.surname+ " " + checkHost.othernames,
+                hall=checkHost.hall,
+                room_number=checkHost.room_number,
+                contact=visitors_contact
+            )
+            activity = Activities(
+            doer =session['user'],
+            event ="Logged a visitor of Room: " + room_number)
+            try:
+                db.session.add(Visits)
+                db.session.add(activity)
+                db.session.commit()
+            except:
+                error_message = "Problem Encountered While Logging Visitor!"
+                return errorhandler(error_message),400
+        else:
+            error_message="No Such Host Exist OR Wrong Room Number!"
             return errorhandler(error_message)
     Visits = Visitors.query.order_by(Visitors.time_in).all()
     return render_template('visitorsbook.html',Visits=Visits)
