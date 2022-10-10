@@ -1,24 +1,41 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import desc, or_
+from sqlalchemy import desc, or_, func
 from datetime import datetime
+# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from flask_mail import Mail,Message
 from flask_login.utils import login_user
 from werkzeug.utils import redirect
 from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
+import click
+from flask.cli import with_appcontext
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///hallmanagement.db"
+app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///db.sqlite3"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
+app.config['MAIL_PORT'] = 465
+app.config['MAIL_USERNAME'] = 'mrr.tymer@gmail.com'
+app.config['MAIL_PASSWORD'] = os.environ.get('PASSWORD')
+app.config['MAIL_USE_SSL'] = False
+app.config['MAIL_USE_TLS'] = True
+mail = Mail(app)
 db = SQLAlchemy(app)
+
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
+
+@click.command(name='create_tables')
+@with_appcontext
+def create_tables():
+    db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -51,6 +68,19 @@ class User(UserMixin, db.Model):
     portfolio = db.Column(db.String(30), nullable=False)
     hall = db.Column(db.String(30), nullable=False)
     gender = db.Column(db.String(6), nullable=False)
+
+    # def get_reset_token(self, expires_sec=600):
+    #     serial = Serializer(app.config['SECRET_KEY'], expires_sec)
+    #     return serial.dumps({'user_id': self.id}).decode('utf-8')
+
+    # @staticmethod
+    # def verify_reset_token(token):
+    #     serial = Serializer(app.config['SECRET_KEY'])
+    #     try:
+    #         user_id = serial.loads(token)['user_id']
+    #     except:
+    #         return None
+    #     return User.query.get(user_id)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -113,6 +143,9 @@ class Visitors(db.Model):
     def __repr__(self):
         return '<User %r>' % self.id
 
+#==================================================================Token===============================================================
+
+
 #==================================================================Home Page===============================================================
 @app.route('/', methods=['POST','GET'])
 def index():
@@ -136,20 +169,54 @@ def login():
         return render_template("login.html")
 
 #==============================================================Reset Password==============================================================
-@app.route('/resetpassword', methods=['POST','GET'])
-def resetpassword():
+@app.route('/forgotpassword', methods=['POST','GET'])
+def forgotpassword():
     if request.method == 'POST':
         email=request.form.get('email').lower()
-        checkEmail=User.query.filter(User.email==email).first()
-        if checkEmail:
-            send_mail()
-            # message = flash('OTP sent please check your mail!')
+        user=User.query.filter(User.email==email).first()
+        if user:
+            send_mail(user)
+            message = 'OTP sent please check your mail!'
+            successhandler(message)
         else:
-            errorhandler('This email is not recognized!')
-    return render_template('resetpassword.html')
+            err_statement ='This email is not recognized!'
+            errorhandler(err_statement)
+    return render_template('forgotpassword.html')
 
-def send_mail():
-    pass
+def send_mail(user):
+    token = user.get_reset_token()
+    msg = Message(subject="Password Reset Request",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[user.email],
+                  body=f'''To reset your password, visit the following link:{url_for('resetToken',token=token, _external=True)}If you did not make this request then simply ignore this email''')
+    mail.send(msg)
+
+@app.route('/resetpassword/<token>', methods=['POST', 'GET'])
+def resetToken(token):
+    user = User.verify_reset_token(token)
+    newpassword = request.form.get('newpass')
+    confirmpassword = request.form.get('confirmpass')
+    if request.method == 'POST':
+        if user is None:
+            flash("That is an invalid or expired Token. Resend Another Email", 'error')
+            return redirect('/ResetAccount')
+        else:
+            if newpassword == confirmpassword:
+                user.password = generate_password_hash(newpassword)
+                try:
+                    # Add new data to db
+                    db.session.commit()
+                    flash("Password Successfully Reset, Login with the new password", 'success')
+                    return redirect("/login")
+                except:
+                    # replace with nicer experience
+                    flash("There was an issue resetting your password, create another account instead", 'error')
+                    return redirect("/signUp")
+            else:
+                flash("Passwords Do not Match, try again")
+                return redirect(request.referrer)
+    else:
+        return render_template("ChangePassword.html")
 
 #==================================================================Signup Page=============================================================
 @app.route('/signup', methods=['POST','GET'])
