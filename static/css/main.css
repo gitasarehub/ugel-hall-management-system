@@ -91,6 +91,7 @@ small{
 .text-muted{
     color: var(--color-info-dark);
 }
+
 p{
     color: var(--color-dark-variant);
 }
@@ -206,6 +207,12 @@ main .top .profile{
 }
 .profile .info .text-muted{
     color: var(--color-success-2);
+}
+.profile .info .clickable{
+    color: var(--color-primary);
+}
+.profile .info .clickable:hover{
+    color: var(--color-dangerclose);
 }
 /* _____________________________==== DASHBOARD ====_____________________________ */
 main #topic{

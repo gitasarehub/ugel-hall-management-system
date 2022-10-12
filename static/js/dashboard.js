@@ -1,23 +1,3 @@
-
-//--------------- progress bar ---------------
-// let circularProgress= document.querySelector('.circular-progress'),
-//      progressValue= document.querySelector('.progress-value');
-
-//      let progressStartValue=0,
-//          progressEndValue=90,
-//          speed=100;
-//     let progress = setInterval(() =>{
-//         progressStartValue++
-//         progressValue.textContent= $;{progressStartValue}+"%"
-//         circularProgress.style.background = 'conic-gradient(#ffbb55 ${progressStartValue * 3.6}deg, #ededed 0deg)'
-
-//         if(progressStartValue == progressEndValue){
-//             clearInterval(progress);
-//         }
-//     }, speed);
-
-
-
 // set date and time for dashboard
     var date = new Date();
     var currentDate = date.toISOString().substring(0,10);

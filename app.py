@@ -1,8 +1,9 @@
-from flask import Flask, render_template, request, redirect, url_for, flash, session
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, or_, func
 from datetime import datetime
-# from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import URLSafeTimedSerializer as Serializer
+from itsdangerous import SignatureExpired
 from flask_mail import Mail,Message
 from flask_login.utils import login_user
 from werkzeug.utils import redirect
@@ -10,32 +11,31 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
-import click
+# import click
 from flask.cli import with_appcontext
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///db.sqlite3"
+app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ugelhalls.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+db = SQLAlchemy(app)
+# os.environ.get('PASSWORD')
 app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
 app.config['MAIL_PORT'] = 465
 app.config['MAIL_USERNAME'] = 'mrr.tymer@gmail.com'
-app.config['MAIL_PASSWORD'] = os.environ.get('PASSWORD')
+app.config['MAIL_PASSWORD'] = 'Big.Boy0411'
 app.config['MAIL_USE_SSL'] = False
 app.config['MAIL_USE_TLS'] = True
-mail = Mail(app)
-db = SQLAlchemy(app)
 
+mail = Mail(app)
+
+serial=Serializer(app.config['SECRET_KEY'])
 
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "login"
 
-@click.command(name='create_tables')
-@with_appcontext
-def create_tables():
-    db.create_all()
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -44,22 +44,22 @@ def load_user(user_id):
 class Student(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, unique=True, nullable=False)
-    surname = db.Column(db.String(200), nullable=False)
-    othernames = db.Column(db.String(200), nullable=False)
+    surname = db.Column(db.String(30), nullable=False)
+    othernames = db.Column(db.String(100), nullable=False)
     gender = db.Column(db.String(8), nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
     contact = db.Column(db.String(20), unique=True, nullable=False)
-    course = db.Column(db.String(100), nullable=False)
+    course = db.Column(db.String(150), nullable=False)
     level = db.Column(db.String(3), nullable=False)
-    email = db.Column(db.String(200), unique=True, nullable=False)
-    hall = db.Column(db.String(100), nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=False)
+    hall = db.Column(db.String(60), nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.id
 
 class User(UserMixin, db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    surname = db.Column(db.String(20), nullable=False)
+    surname = db.Column(db.String(30), nullable=False)
     othernames = db.Column(db.String(100), nullable=False)
     username = db.Column(db.String(20), unique=True, nullable=False)
     email = db.Column(db.String(60), unique=True, nullable=False)
@@ -143,7 +143,74 @@ class Visitors(db.Model):
     def __repr__(self):
         return '<User %r>' % self.id
 
-#==================================================================Token===============================================================
+class Passcode(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    newpasscode = db.Column(db.String(200), nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.id
+
+class CheckedIn(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, unique=True, nullable=False)
+    fullname = db.Column(db.String(300), nullable=False)
+    gender = db.Column(db.String(8), nullable=False)
+    hall = db.Column(db.String(30), nullable=False)
+    room_number = db.Column(db.String(5), nullable=False)
+    course = db.Column(db.String(100), nullable=False)
+    level = db.Column(db.String(3), nullable=False)
+    contact = db.Column(db.String(18), nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.id
+
+class Account_Ugel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    student_id = db.Column(db.Integer, unique=True, nullable=False)
+    room_number = db.Column(db.String(5), nullable=False)
+    transaction_nbr = db.Column(db.String(200), nullable=False)
+    payment_mode = db.Column(db.String(10), nullable=False)
+    fees_paid = db.Column(db.String(5), nullable=False)
+    level = db.Column(db.String(3), nullable=False)
+
+    def __repr__(self):
+        return '<User %r>' % self.id
+
+#==============================================================CheckIn Students========================================================
+@app.route('/checkIn', methods=['POST','GET'])
+def checkIn():
+    if request.method == "POST":     
+            payment_mode = request.form['payment_mode']
+            student_id = request.form['student_id']
+            transaction_nbr = request.form['transaction_nbr'].upper()
+            account = Account_Ugel.query.filter(Account_Ugel.transaction_nbr==transaction_nbr and Account_Ugel.payment_mode==payment_mode).first()
+            if(account):
+                student = Student.query.filter(Student.student_id == student_id).first()
+                checkid = account.student_id==student_id
+                if (checkid):
+                    info = CheckedIn(
+                        student_id = student_id,
+                        fullname = student.surname+" "+student.othernames,
+                        gender = student.gender,
+                        room_number = student.room_number,
+                        hall = student.hall,
+                        level = student.hall,
+                        course = student.course,
+                        contact = student.contact)
+                try:
+                    db.session.add(info)
+                    db.session.commit()  
+                    message = "You have successfully Checked In To Room, "+ student.room_number +". Return to the Lodge for your Souvernirs!"
+                    return successhandler(message)
+                except:
+                    # replace with nicer experience
+                    error_statement = "Error: Transaction_ID Does Not Match Its Paid Student ID!"
+                    return errorhandler(error_statement)
+            else:
+                error_statement = "To check in to your room, your hall fees must be paid!"
+                return errorhandler(error_statement)
+    else:
+        return render_template('checkIn.html')
 
 
 #==================================================================Home Page===============================================================
@@ -168,7 +235,7 @@ def login():
     else:
         return render_template("login.html")
 
-#==============================================================Reset Password==============================================================
+#==============================================================Reset Password After ForgetPassword==============================================================
 @app.route('/forgotpassword', methods=['POST','GET'])
 def forgotpassword():
     if request.method == 'POST':
@@ -176,54 +243,39 @@ def forgotpassword():
         user=User.query.filter(User.email==email).first()
         if user:
             send_mail(user)
-            message = 'OTP sent please check your mail!'
+            message = 'check your mail for a confirmation link!'
             successhandler(message)
         else:
             err_statement ='This email is not recognized!'
             errorhandler(err_statement)
     return render_template('forgotpassword.html')
 
-def send_mail(user):
-    token = user.get_reset_token()
-    msg = Message(subject="Password Reset Request",
-                  sender=app.config['MAIL_USERNAME'],
-                  recipients=[user.email],
-                  body=f'''To reset your password, visit the following link:{url_for('resetToken',token=token, _external=True)}If you did not make this request then simply ignore this email''')
-    mail.send(msg)
-
 @app.route('/resetpassword/<token>', methods=['POST', 'GET'])
 def resetToken(token):
-    user = User.verify_reset_token(token)
-    newpassword = request.form.get('newpass')
-    confirmpassword = request.form.get('confirmpass')
-    if request.method == 'POST':
-        if user is None:
-            flash("That is an invalid or expired Token. Resend Another Email", 'error')
-            return redirect('/ResetAccount')
-        else:
-            if newpassword == confirmpassword:
-                user.password = generate_password_hash(newpassword)
-                try:
-                    # Add new data to db
-                    db.session.commit()
-                    flash("Password Successfully Reset, Login with the new password", 'success')
-                    return redirect("/login")
-                except:
-                    # replace with nicer experience
-                    flash("There was an issue resetting your password, create another account instead", 'error')
-                    return redirect("/signUp")
-            else:
-                flash("Passwords Do not Match, try again")
-                return redirect(request.referrer)
-    else:
-        return render_template("ChangePassword.html")
+    # if request.method == 'POST':
+    #     newpassword=request.form['password']
+    try:
+        useremail=serial.loads(token, salt='email-confirm',max_age=300)
+    except SignatureExpired:
+        return '<h1>The token Expired!</h1>'
+    return '<h1>The token works!</h1>'
 
+def send_mail(user):
+    useremail= user.email
+    token = serial.dumps(useremail,salt='email-confirm')
+    link= url_for('resetToken',token=token, external=True)
+    msg = Message(subject="Password Reset Request",
+                  sender=app.config['MAIL_USERNAME'],
+                  recipients=[useremail],
+                  body='Your link is {}'.format(link))
+    mail.send(msg)
 #==================================================================Signup Page=============================================================
 @app.route('/signup', methods=['POST','GET'])
 def signup():
     if request.method == "POST":     
-        Passcode = request.form['passcode']
-        if Passcode == "ugelstaff2022":
+        recievedpasscode = request.form['passcode']
+        currentpasscode= Passcode.query.order_by(desc(Passcode.id)).first()
+        if recievedpasscode == currentpasscode.newpasscode:
                     username = request.form['username'].title()
                     surname = request.form['surname'].title()
                     othernames = request.form['othernames'].title()
@@ -275,6 +327,56 @@ def signup():
     else:
         return render_template('signup.html')
 
+#============================================================Reset Passcode=============================================================
+@app.route('/resetpasscode', methods=['POST', 'GET'])
+@login_required
+def resetpasscode():
+    if request.method == "POST":
+        new = request.form['new']
+        old = request.form['old']
+        recentpasscode= Passcode.query.order_by(desc(Passcode.id)).first()
+        if (old == recentpasscode.newpasscode):
+            data = Passcode(
+                newpasscode= new
+                )
+
+        else:
+            error_message= "Incorrect Old Passcode Entered!"
+            return errorhandler(error_message),400
+        try:
+                db.session.add(data)
+                db.session.commit()
+                message="Passcode changed successfully!"
+                return successhandler(message)
+        except:
+                error_message = "Changing Passcode Was Unsuccessful"
+                return errorhandler(error_message),400
+    else:
+        return render_template('resetpasscode.html')
+
+#============================================================Change UserPassword=============================================================
+@app.route('/changepassword/<int:id>', methods=['POST', 'GET'])
+@login_required
+def changepassword(id):
+    if request.method == "POST":
+                new = request.form['new']
+                old = request.form['old']
+                currentuser = User.query.filter(User.id==id).first()
+                if (check_password_hash(currentuser.password,old)):
+                    currentuser.password = generate_password_hash(new)
+                    try:
+                            db.session.commit()
+                            message="Password changed successfully!"
+                            return successhandler(message)
+                    except:
+                            error_message = "Changing Password Was Unsuccessful"
+                            return errorhandler(error_message),400
+                else:
+                    error_message= "Entered Old Password Is Incorrect!"
+                    return errorhandler(error_message),400
+    else:
+        return render_template('changepassword.html')
+        
 #==============================================================SuccessHandling Page===========================================================
 @app.route('/successhandling', methods=['POST','GET'])
 def successhandler(success_message):
@@ -650,35 +752,12 @@ def logout():
 def studentPortal():
     return render_template('studentPortal.html')
 
-#===============================================================Resume Form===============================================================
-@app.route('/resumeForm', methods=['POST','GET'])
-def resumeForm():
-    # if request.method == "POST":     
-    #     Passcode = request.form['passcode']
-    #     if Passcode == "ugelstaff2022":
-    #             resume_info = resume_store(
-    #                 student_id = request.form['username'].title(),
-    #                 souvenirs = request.form['souvenirs'].title(),
-    #                 email = request.form['email'].lower(),
-    #                 password = generate_password_hash(request.form['password']),
-    #                 contact = request.form['contact'],
-    #                 hall = request.form['hall'].title(),
-    #             )
-    #             try:
-    #                 db.session.add(user_info)
-    #                 db.session.commit()  
-    #                 # Add new data to db
-    #                 return redirect(url_for("login"))
-    #             except:
-    #                 # replace with nicer experience
-    #                 error_statement = "This Username or email already exists choose another one"
-    #                 return errorhandler(error_statement)
-    #     else:
-    #         error_statement = "Passcode provided is invalid, visit your Admin for a Passcode"
-    #         return errorhandler(error_statement)
-        
-    # else:
-        return render_template('resumeForm.html')
+#===============================================================Display CheckedIn Students===============================================================
+@app.route('/checkedIn', methods=['POST','GET'])
+@login_required
+def checkedIn():
+    students = CheckedIn.query.order_by(CheckedIn.room_number).all()
+    return render_template('checkedIn.html',students=students)
 
 #=============================================================About_us Page============================================================
 @app.route('/about_us', methods=['POST','GET'])

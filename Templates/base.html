@@ -87,9 +87,16 @@
                 <div class="profile">
                     <div class="info">
                         {% if current_user.is_authenticated %}
-                        <p>Hello, <b>{{ current_user.username }}</b></p>
-                        <small class="text-muted">{{current_user.hall}},</small>
-                        <small class="text-muted">{{current_user.portfolio}}</small>
+                        <p>
+                        Hi, <small class="text-muted">{{current_user.portfolio}}</small>
+                        <b>{{ current_user.surname}}</b>
+                        </p>
+                        
+                        <small class="text-muted">{{current_user.hall}}</small><br>
+                        <a href="/changepassword/{{current_user.id}}"><b><small class="clickable">Change Password</small></a></b><br>
+                            {% if current_user.portfolio == "Hall Tutor" %}
+                        <a href="/resetpasscode"><b><small class="clickable">Reset Passcode</small></a></b>
+                            {% endif %}
                         {% endif %}
                     </div>
                 </div>
