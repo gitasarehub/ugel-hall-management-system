@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import desc, or_, func
 from datetime import datetime
@@ -11,8 +11,6 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
-# import click
-from flask.cli import with_appcontext
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -20,13 +18,12 @@ app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ugelhalls.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
-# os.environ.get('PASSWORD')
-app.config['MAIL_SERVER'] = 'smtp.googlemail.com'
-app.config['MAIL_PORT'] = 465
-app.config['MAIL_USERNAME'] = 'mrr.tymer@gmail.com'
-app.config['MAIL_PASSWORD'] = 'Big.Boy0411'
-app.config['MAIL_USE_SSL'] = False
+
+app.config['MAIL_SERVER'] = 'smtp.gmail.com'
+app.config['MAIL_PORT'] = 587
 app.config['MAIL_USE_TLS'] = True
+app.config['MAIL_USERNAME'] = 'hubertdeveloped@gmail.com'
+app.config['MAIL_PASSWORD'] = 'asare1234567'
 
 mail = Mail(app)
 
@@ -69,26 +66,26 @@ class User(UserMixin, db.Model):
     hall = db.Column(db.String(30), nullable=False)
     gender = db.Column(db.String(6), nullable=False)
 
-    # def get_reset_token(self, expires_sec=600):
-    #     serial = Serializer(app.config['SECRET_KEY'], expires_sec)
-    #     return serial.dumps({'user_id': self.id}).decode('utf-8')
+    def get_reset_token(self, expires_sec=600):
+        serial = Serializer(app.config['SECRET_KEY'], expires_sec)
+        return serial.dumps({'user_id': self.id}).decode('utf-8')
 
-    # @staticmethod
-    # def verify_reset_token(token):
-    #     serial = Serializer(app.config['SECRET_KEY'])
-    #     try:
-    #         user_id = serial.loads(token)['user_id']
-    #     except:
-    #         return None
-    #     return User.query.get(user_id)
+    @staticmethod
+    def verify_reset_token(token):
+        serial = Serializer(app.config['SECRET_KEY'])
+        try:
+            user_id = serial.loads(token)['user_id']
+        except:
+            return None
+        return User.query.get(user_id)
 
     def __repr__(self):
         return '<User %r>' % self.id
 
 class Complaints(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    student_id = db.Column(db.String(8), nullable=False)
-    std_fullname = db.Column(db.String(120), nullable=False)
+    student_id = db.Column(db.Integer, nullable=False)
+    std_fullname = db.Column(db.String(150), nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
     hall = db.Column(db.String(30), nullable=False)
     issue_type = db.Column(db.String(25), nullable=False)
@@ -120,9 +117,9 @@ class Activities(db.Model):
 class Keylog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     room_number = db.Column(db.String(5), nullable=False)
-    loggers_name = db.Column(db.String(120), nullable=False)
+    loggers_name = db.Column(db.String(150), nullable=False)
     time_in = db.Column(db.DateTime, default=datetime.utcnow)
-    collectors_name = db.Column(db.String(120))
+    collectors_name = db.Column(db.String(150))
     time_out = db.Column(db.DateTime)
 
     def __repr__(self):
@@ -130,10 +127,10 @@ class Keylog(db.Model):
 
 class Visitors(db.Model):
     id = db.Column(db.Integer, primary_key=True)
-    visitors_name = db.Column(db.String(120), nullable=False)
-    id_type = db.Column(db.String(25), nullable=False)
-    id_number = db.Column(db.String(25), nullable=False)
-    hostname = db.Column(db.String(120), nullable=False)
+    visitors_name = db.Column(db.String(150), nullable=False)
+    id_type = db.Column(db.String(20), nullable=False)
+    id_number = db.Column(db.String(30), nullable=False)
+    hostname = db.Column(db.String(150), nullable=False)
     hall = db.Column(db.String(30), nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
     contact = db.Column(db.String(18), nullable=False)
@@ -153,12 +150,12 @@ class Passcode(db.Model):
 class CheckedIn(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, unique=True, nullable=False)
-    fullname = db.Column(db.String(300), nullable=False)
+    fullname = db.Column(db.String(120), nullable=False)
     gender = db.Column(db.String(8), nullable=False)
     hall = db.Column(db.String(30), nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
     course = db.Column(db.String(100), nullable=False)
-    level = db.Column(db.String(3), nullable=False)
+    level = db.Column(db.Integer, nullable=False)
     contact = db.Column(db.String(18), nullable=False)
 
     def __repr__(self):
@@ -168,10 +165,10 @@ class Account_Ugel(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     student_id = db.Column(db.Integer, unique=True, nullable=False)
     room_number = db.Column(db.String(5), nullable=False)
-    transaction_nbr = db.Column(db.String(200), nullable=False)
+    transaction_nbr = db.Column(db.String(200), unique=True, nullable=False)
     payment_mode = db.Column(db.String(10), nullable=False)
-    fees_paid = db.Column(db.String(5), nullable=False)
-    level = db.Column(db.String(3), nullable=False)
+    fees_paid = db.Column(db.REAL, nullable=False)
+    level = db.Column(db.Integer, nullable=False)
 
     def __repr__(self):
         return '<User %r>' % self.id
@@ -236,39 +233,51 @@ def login():
         return render_template("login.html")
 
 #==============================================================Reset Password After ForgetPassword==============================================================
+def send_mail(user):
+    token = user.get_reset_token()
+    msg = Message("Password Reset Request",recipients = [user.email], sender='hubertdeveloped@gmail.com')
+    msg.body=f'''To reset your password please follow the link below:
+    {url_for('resetWithToken',token=token, _external=True)}
+    If you did not send a password reset request, then ignore this message.'''
+
+    mail.send(msg)
+
 @app.route('/forgotpassword', methods=['POST','GET'])
 def forgotpassword():
     if request.method == 'POST':
         email=request.form.get('email').lower()
         user=User.query.filter(User.email==email).first()
+        message = 'check your mail for a confirmation link!'
         if user:
-            send_mail(user)
-            message = 'check your mail for a confirmation link!'
-            successhandler(message)
-        else:
-            err_statement ='This email is not recognized!'
-            errorhandler(err_statement)
+            try:
+                send_mail(user)
+                flash (message)
+            except:
+                # message ='This email is not recognized!'
+                flash(message)
     return render_template('forgotpassword.html')
 
-@app.route('/resetpassword/<token>', methods=['POST', 'GET'])
-def resetToken(token):
-    # if request.method == 'POST':
-    #     newpassword=request.form['password']
-    try:
-        useremail=serial.loads(token, salt='email-confirm',max_age=300)
-    except SignatureExpired:
-        return '<h1>The token Expired!</h1>'
-    return '<h1>The token works!</h1>'
+@app.route('/forgotpassword/<token>', methods=['POST', 'GET'])
+def resetWithToken(token):
+    user = User.verify_reset_token(token)
+    if user is None:
+        error_message= "The token Expired!"
+        errorhandler(error_message)
+        return redirect(url_for('forgotpassword'))
+    elif request.method == 'POST':
+        newpassword = generate_password_hash(request.form['password'])
+        try:
+            user.password = newpassword
+            db.session.commit()
+            success = "Password Changed Successfully. Please Login!"
+            successhandler(success)
+            return redirect(url_for('login'))
+        except:
+            error="An error occured whiles changing password!"
+            errorhandler(error)
+    return render_template ('resetpassword.html')
 
-def send_mail(user):
-    useremail= user.email
-    token = serial.dumps(useremail,salt='email-confirm')
-    link= url_for('resetToken',token=token, external=True)
-    msg = Message(subject="Password Reset Request",
-                  sender=app.config['MAIL_USERNAME'],
-                  recipients=[useremail],
-                  body='Your link is {}'.format(link))
-    mail.send(msg)
+
 #==================================================================Signup Page=============================================================
 @app.route('/signup', methods=['POST','GET'])
 def signup():
