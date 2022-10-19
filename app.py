@@ -467,7 +467,7 @@ def addStudent():
         othernames = request.form['othernames'].title()
         student_id = request.form['student_id']
         gender = request.form['gender'].title()
-        hall = request.form['hall']
+        hall = current_user.hall
         level = request.form['level']
         room_number = request.form['room_number'].capitalize()
         contact = request.form['contact']
@@ -500,7 +500,7 @@ def addStudent():
                 db.session.commit()
                 return redirect(url_for("database"))
         except:
-                error_message = "Add student was unsuccessful"
+                error_message = "Student, Email And Phone Must Be Unique!"
                 return errorhandler(error_message),400
     else:
         return render_template('addstudent.html')
@@ -527,12 +527,9 @@ def update(id):
 # UpdateHere just can't update student ID
         updateStudent.surname = request.form['surname'].title()
         updateStudent.lastname = request.form['othernames'].title()
-        updateStudent.gender = request.form['gender'].title()
         updateStudent.room_number = request.form['room_number'].capitalize()
         updateStudent.contact = request.form['contact']
         updateStudent.course = request.form['course'].title()
-        updateStudent.level = request.form['level']
-        updateStudent.hall = request.form['hall']
         updateStudent.email = request.form['email'].lower()
 
         try:

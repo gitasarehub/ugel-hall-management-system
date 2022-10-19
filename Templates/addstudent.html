@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
     <title>UGEL - Add Student</title>
+    <script src="{{url_for('static', filename='js/addstudent.js')}}"></script>
 {% endblock %}
 
 {% block body %}
@@ -11,13 +12,14 @@
 <div class="container">
     <header>Fill Student Details</header>
 
-    <form action="#" method="post">
+    <form action="#" method="post" onsubmit="return checkstu_id()">
             <div class="form first">
                 <div class="details personal">
                     <div class="fields">
                         <div class="input-field">
                             <label>Student ID</label>
-                            <input name="student_id" type="text" required>
+                            <input name="student_id" id="stu_id" type="text" required>
+                            <span id = "std_message" style="color:red"> </span>
                         </div>
                         <div class="input-field" >
                             <label>Surname</label>
@@ -31,8 +33,8 @@
 
                         <div class="input-field">
                             <label>Gender</label>
-                            <select name="gender" required>
-                                <option disabled selected>Select gender</option>
+                            <select name="gender" id="gender" required>
+                                <option value="">Select gender</option>
                                 <option value="Male">Male</option>
                                 <option value="Female">Female</option>
                             </select>
@@ -41,18 +43,14 @@
                         <div class="input-field">
                             <label>Hall</label>
                             <select name="hall" required>
-                                <option disabled selected>Select Hall</option>
-                                <option value="Dr. Hilla Limann" >Dr. Hilla Limann</option>
-                                <option value="Alexander Kwapong" >Alexander Kwapong</option>
-                                <option value="Elizabeth Frances Sey" >Elizabeth Frances Sey</option>
-                                <option value="Jean Aka Nelson" >Jean Aka Nelson</option>
+                                <option disabled selected value={{current_user.hall}}>{{current_user.hall}}</option>
                             </select>
                         </div>
 
                         <div class="input-field">
                             <label>Level</label>
-                            <select name="level" required>
-                                <option disabled selected>Select Level</option>
+                            <select name="level" id="level" required>
+                                <option value="">Select Level</option>
                                 <option value="100" >100</option>
                                 <option value="200" >200</option>
                                 <option value="300" >300</option>
@@ -88,7 +86,17 @@
     </form>
 </div>
 <script>
-    const icons = document.querySelector(".add-icon");
-    icons.classList.add("active")
+const icons = document.querySelector(".add-icon");
+icons.classList.add("active")
+
+var stu_id = document.getElementById("stu_id").value;
+
+function checkstu_id(){
+    var std_idlength = stu_id.value.length;
+if (std_idlength !== 8){ 
+   document.getElementById("std_message").innerHTML = "Select Student's Please!";  
+   return false;  
+}
+}
 </script>
 {% endblock %}
