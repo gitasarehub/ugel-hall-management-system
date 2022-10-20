@@ -500,7 +500,7 @@ def addStudent():
                 db.session.commit()
                 return redirect(url_for("database"))
         except:
-                error_message = "Student, Email And Phone Must Be Unique!"
+                error_message = "Student ID, Email And Phone Must Be Unique!"
                 return errorhandler(error_message),400
     else:
         return render_template('addstudent.html')
