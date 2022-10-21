@@ -38,7 +38,7 @@ deactivate () {
 # unset irrelevant variables
 deactivate nondestructive
 
-VIRTUAL_ENV="/Users/TyMer/Desktop/Ugel Project/env"
+VIRTUAL_ENV="/Users/TyMer/Desktop/ugel-hall-management-system/env"
 export VIRTUAL_ENV
 
 _OLD_VIRTUAL_PATH="$PATH"

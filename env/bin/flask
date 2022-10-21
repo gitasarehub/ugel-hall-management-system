@@ -1,6 +1,4 @@
-#!/bin/sh
-'''exec' "/Users/TyMer/Desktop/Ugel Project/env/bin/python3.10" "$0" "$@"
-' '''
+#!/Users/TyMer/Desktop/ugel-hall-management-system/env/bin/python3.10
 # -*- coding: utf-8 -*-
 import re
 import sys
