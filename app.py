@@ -11,6 +11,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from flask_login import UserMixin, login_manager, login_user, LoginManager, login_required, logout_user, current_user
 from datetime import datetime
 import os
+import sys
+import logging
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
@@ -777,4 +779,5 @@ def contact_us():
 
 #=======================================================================================================================================
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.logger.addHandler(logging.StreamHandler(sys.stdout))
+    app.logger.setLevel(logging.ERROR)
