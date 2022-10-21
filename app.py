@@ -219,9 +219,9 @@ def checkIn():
 
 
 #==================================================================Home Page===============================================================
-@app.route('/', methods=['POST','GET'])
+@app.route('/')
 def index():
-    return render_template(url_for('templates',filename='home.html'))
+    return render_template('home.html')
 
 #==================================================================Login Page==============================================================
 @app.route('/login', methods=['POST','GET'])
