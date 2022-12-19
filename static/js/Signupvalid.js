@@ -10,56 +10,29 @@ const staff_type = document.getElementById('staff_type')
 const errorElement= document.getElementById('error')
 const sex = document.getElementById('gender')
 
+validateform(register)
+function validateform(register){
+    if (allLetter(surname)){
+        if (allLetters(othernames)){
+            if (gender(sex)){
+                if (allnumeric(uphone)){
+                    if (ValidateEmail(uemail)){
+                        if (checkPasswords(password,password2)){
 
-register.addEventListener('submit', (e) => {
-    let messages = []
-
-    if (password.value.length || password2.value.length <= 7){
-        messages.push('Password length must be longer than 7 characters')
-        password.focus()
+                        }
+                    }
+                }
+            }
+        }
+        register.addEventListener('submit', function(event){
+        event.preventDefault();
+    })
     }
-
-    if(password.value !== password2.value){
-        messages.push('Your Passwords do not match!')
-        password2.focus()
-    }
-
-    if(allLetter(surname) == false){
-        messages.push ('Name must have alphabet characters only!')
-        surname.focus()
-    }
-
-    if(allLetters(othernames) == false){
-        messages.push ('Other names can have alphabet characters and spaces only')
-        othernames.focus()
-    }
-
-    if(gender(sex) == false){
-        messages.push ('Please select your gender!')
-        sex.focus()
-    }
-
-    if(allnumeric(uphone) == false){
-        messages.push ('Contact should be only numbers')
-        uphone.focus()
-    }
-
-    if(ValidateEmail(uemail) == false){
-        messages.push ('Enter a valid Email!')
-        uemail.focus()
-    }
-
-    if (messages.length > 0) {
-        e.preventDefault()
-        errorElement.innerText = messages.join(",\n")
-    }
-})
-
-
+}
 
 function allLetter(uname){ 
     var letters = /^[A-Za-z]+$/;
-    if(uname.value.match(letters))
+    if (uname.value.match(letters))
         {
             return true;
         }
@@ -71,7 +44,7 @@ function allLetter(uname){
 
 function allLetters(uname1){ 
     var letters = /^[A-Za-z ]+$/;
-    if(uname1.value.match(letters))
+    if (uname1.value.match(letters))
         {
             return true;
         }
@@ -83,19 +56,19 @@ function allLetters(uname1){
 
 
 function gender(sex){
-    if(sex.value === '' || sex.value == null)
+    if (sex.value === 'Male' || sex.value == 'Female')
         {
-            return false;
+            return true;
         }
     else
         {
-            return true;
+            return false;
         }
     }
 
 function allnumeric(uphone){ 
     var numbers = /^[0-9]+$/;
-    if(uphone.value.match(numbers))
+    if (uphone.value.match(numbers))
         {
             return true;
         }
@@ -107,12 +80,24 @@ function allnumeric(uphone){
 
 function ValidateEmail(uemail){
     var mailformat = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
-    if(uemail.value.match(mailformat))
+    if (uemail.value.match(mailformat))
         {
             return true;
         }
     else
         {
+            return false;
+        }
+}
+
+function checkPasswords(Pass1,Pass2){
+    if (Pass1 === Pass2)
+        {
+            return true;
+        }
+    else
+        {
+            alert ("Passwords are not the Same!");
             return false;
         }
 }
