@@ -20,7 +20,15 @@ app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
 app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ugelhall.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['MAIL_SERVER']= 'smtp.gmail.com'
+app.config['MAIL_PORT']= 465
+app.config['MAIL_USERNAME']= 'hubertdeveloped@gmail.com'
+app.config['MAIL_PASSWORD']= 'Big.Boy0411'
+app.config['MAIL_DEFAULT_SENDER']= 'hubertdeveloped@gmail.com'
+app.config['MAIL_USE_TLS'] = False
+app.config['MAIL_USE_SSL'] = True
 
+mail = Mail(app)
 db = SQLAlchemy(app)
 
 app.config['MAIL_SERVER'] = 'smtp.gmail.com'
@@ -243,7 +251,7 @@ def login():
 #==============================================================Reset Password After ForgetPassword==============================================================
 def send_mail(user):
     token = user.get_reset_token()
-    msg = Message("Password Reset Request",recipients = [user.email], sender='hubertdeveloped@gmail.com')
+    msg = Message("Password Reset Request",recipients = [user.email])
     msg.body=f'''To reset your password please follow the link below:
     {url_for('resetWithToken',token=token, _external=True)}
     If you did not send a password reset request, then ignore this message.'''
