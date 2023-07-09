@@ -18,7 +18,8 @@ import os
 
 app = Flask(__name__)
 app.config['SECRET_KEY'] = os.urandom(24)
-app.config['SQLALCHEMY_DATABASE_URI']="sqlite:///ugelhall.db"
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI']='sqlite:///' + os.path.join(basedir,'ugelhall.db')
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['MAIL_SERVER']= 'smtp.gmail.com'
 app.config['MAIL_PORT']= 465
@@ -189,6 +190,8 @@ class Account_Ugel(db.Model):
     def __repr__(self):
         return '<User %r>' % self.id
 
+with app.app_context():
+    db.create_all()
 #==============================================================CheckIn Students========================================================
 @app.route('/checkIn', methods=['POST','GET'])
 def checkIn():
